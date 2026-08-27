@@ -1,0 +1,26 @@
+<div id="<%= dom_id teacher %>">
+  <div>
+    <strong>Name:</strong>
+    <%= teacher.name %>
+  </div>
+
+  <div>
+    <strong>Email:</strong>
+    <%= teacher.email %>
+  </div>
+
+  <div>
+    <strong>Specialization:</strong>
+    <%= teacher.specialization %>
+  </div>
+
+  <div>
+    <%= form.label :department_id, "Department", style: "display: block" %>
+    <%= form.collection_select :department_id,
+                               Department.order(:name),
+                               :id,
+                               :name,
+                               { prompt: "Select a department" } %>
+  </div>
+
+</div>

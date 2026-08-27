@@ -1,0 +1,28 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @teacher %>
+
+<% if @teacher.subjects.any? %>
+  <h3>List of Subjects:</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @teacher.subjects.each do |subject| %>
+        <tr>
+          <td><%= subject.name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
+<div>
+  <%= link_to "Edit this teacher", edit_teacher_path(@teacher) %> |
+  <%= link_to "Back to teachers", teachers_path %>
+
+  <%= button_to "Destroy this teacher", @teacher, method: :delete %>
+</div>
