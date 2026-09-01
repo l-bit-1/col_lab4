@@ -2,6 +2,33 @@
 
 <%= render @student %>
 
+<% if @student.classlists.any? %>
+  <h3>List of Subjects:</h3>
+  <table>
+    <thead> 
+      <tr>
+        <th>Name</th>
+        <th>Section</th>
+        <th>Room</th>
+        <th>Timeslot</th>
+        <th>Teacher</th>
+
+      </tr>
+    </thead>
+    <tbody>
+      <% @student.classlists.each do |classlist| %>
+        <tr>
+          <td><%= classlist.section.subject.name %></td>
+          <td><%= classlist.section.name %></td>
+          <td><%= classlist.section.room %></td>
+          <td><%= classlist.section.timeslot %></td>
+          <td><%= classlist.section.subject.teacher.name %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+
 <div>
   <%= link_to "Edit this student", edit_student_path(@student) %> |
   <%= link_to "Back to students", students_path %>

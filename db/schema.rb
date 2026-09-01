@@ -10,12 +10,31 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_08_27_015045) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
+  create_table "classlists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "section_id", null: false
+    t.bigint "student_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["section_id"], name: "index_classlists_on_section_id"
+    t.index ["student_id"], name: "index_classlists_on_student_id"
+  end
+
   create_table "departments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "location"
     t.string "name"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "sections", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.string "room"
+    t.bigint "subject_id", null: false
+    t.string "timeslot"
+    t.datetime "updated_at", null: false
+    t.index ["subject_id"], name: "index_sections_on_subject_id"
   end
 
   create_table "students", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -46,6 +65,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_08_27_015045) do
     t.index ["department_id"], name: "index_teachers_on_department_id"
   end
 
+  add_foreign_key "classlists", "sections"
+  add_foreign_key "classlists", "students"
+  add_foreign_key "sections", "subjects"
   add_foreign_key "students", "departments"
   add_foreign_key "subjects", "teachers"
   add_foreign_key "teachers", "departments"
