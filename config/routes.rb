@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :laboratories
   resources :classlists
   resources :sections
   resources :subjects

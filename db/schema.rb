@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_08_014000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_08_080522) do
   create_table "classlists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "section_id", null: false
@@ -25,6 +25,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_014000) do
     t.string "location"
     t.string "name"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "laboratories", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "department_id", null: false
+    t.string "location"
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.index ["department_id"], name: "index_laboratories_on_department_id"
   end
 
   create_table "sections", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -74,6 +83,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_014000) do
 
   add_foreign_key "classlists", "sections"
   add_foreign_key "classlists", "students"
+  add_foreign_key "laboratories", "departments"
   add_foreign_key "sections", "subjects"
   add_foreign_key "students", "departments"
   add_foreign_key "subjects", "teachers"

@@ -1,9 +1,33 @@
 <p style="color: green"><%= notice %></p>
 
 <%= render @department %>
+<h3>List of Teachers:</h3>
+<% if @department.teachers.any? %>
+  <ul>
+    <% @department.teachers.each do |teacher| %>
+      <li>
+        <%= teacher.name %> -
+        <%= teacher.email %> -
+        <%= teacher.specialization %>
+        </li>
+    <% end %>
+</ul>
+<% end %>
+
+<h3>Used Laboratories:</h3>
+<% if @department.laboratories.any? %>
+      <ul>
+        <% @department.laboratories.each do |laboratory| %>
+          <li>
+          <%= laboratory.name %>
+          <%= laboratory.location %>
+          </li>
+      <% end %>
+</ul>
+<% end %>
 
 <% if @department.students.any? %>
-  <h3>List of Students:</h3>
+  <h3>List of estudyent:</h3>
   <table>
     <thead>
       <tr>
@@ -17,12 +41,12 @@
         <tr>
           <td><%= student.name %></td>
           <td><%= student.program %></td>
-          <td><%= student.year_level %></td>
+          <td><%= student.year_level%></td>
         </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+        <% end %>
+        </tbody>
+        </table>
+        <% end %>
 
 <div>
   <%= link_to "Edit this department", edit_department_path(@department) %> |
