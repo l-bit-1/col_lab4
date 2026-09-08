@@ -18,12 +18,53 @@
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%# Bootstrap 5 stylesheet, loaded from a CDN (needs an internet connection). %>
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
+
+    <%# Bootstrap's JavaScript, for things like dropdowns and modals. %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            defer></script>
   </head>
 
   <body>
-    <%= yield %>
+    <div class="d-md-none bg-dark text-white p-2">
+      <button class="btn btn-sm btn-dark" type="button"
+              data-bs-toggle="offcanvas" data-bs-target="#sidebar">
+        &#9776; Menu
+      </button>
+      <span class="ms-2">Department Student Application</span>
+    </div>
+
+    <div class="d-flex">
+      <div class="offcanvas-md offcanvas-start bg-dark text-white flex-shrink-0 min-vh-100"
+           id="sidebar" style="width: 230px">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title">Menu</h5>
+          <button type="button" class="btn-close btn-close-white"
+                  data-bs-dismiss="offcanvas" data-bs-target="#sidebar"></button>
+        </div>
+
+        <div class="offcanvas-body flex-column p-3">
+          <h5 class="d-none d-md-block mb-3">Department Student App</h5>
+
+          <%# nav-pills + flex-column stacks the links vertically. %>
+          <ul class="nav nav-pills flex-column gap-1">
+            <li class="nav-item"><%= sidebar_link "Students", students_path, "students" %></li>
+            <li class="nav-item"><%= sidebar_link "Departments", departments_path, "departments" %></li>
+            <li class="nav-item"><%= sidebar_link "Teachers", teachers_path, "teachers" %></li>
+            <li class="nav-item"><%= sidebar_link "Subjects", subjects_path, "subjects" %></li>
+            <li class="nav-item"><%= sidebar_link "Sections", sections_path, "sections" %></li>
+            <li class="nav-item"><%= sidebar_link "Class Lists", classlists_path, "classlists" %></li>
+          </ul>
+        </div>
+      </div>
+      <main class="flex-grow-1 p-4" style="min-width: 0">
+        <%= yield %>
+      </main>
+    </div>
   </body>
 </html>

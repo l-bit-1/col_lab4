@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_08_014000) do
   create_table "classlists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "section_id", null: false
@@ -31,6 +31,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
     t.datetime "created_at", null: false
     t.string "name"
     t.string "room"
+    t.integer "student_count", default: 0
     t.bigint "subject_id", null: false
     t.string "timeslot"
     t.datetime "updated_at", null: false
@@ -41,7 +42,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
     t.datetime "created_at", null: false
     t.bigint "department_id", null: false
     t.string "name"
+    t.integer "number_of_units", default: 0
     t.string "program"
+    t.integer "subjects_count", default: 0
+    t.float "tuition_fee", limit: 53, default: 0.0
     t.datetime "updated_at", null: false
     t.integer "year_level"
     t.index ["department_id"], name: "index_students_on_department_id"
@@ -50,6 +54,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_01_120000) do
   create_table "subjects", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "name"
+    t.integer "number_of_units", default: 3
+    t.float "per_unit_rate", limit: 53, default: 1000.0
+    t.integer "section_count", default: 0
     t.bigint "teacher_id", null: false
     t.datetime "updated_at", null: false
     t.index ["teacher_id"], name: "index_subjects_on_teacher_id"

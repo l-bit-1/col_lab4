@@ -1,22 +1,13 @@
-<div id="<%= dom_id student %>">
-  <div>
-    <strong>Name:</strong>
-    <%= student.name %>
-  </div>
+<dl class="row mb-0" id="<%= dom_id student %>">
+  <dt class="col-5 text-muted fw-normal">Name</dt>
+  <dd class="col-7 fw-semibold"><%= student.name %></dd>
 
-  <div>
-    <strong>Year level:</strong>
-    <%= student.year_level %>
-  </div>
+  <dt class="col-5 text-muted fw-normal">Year Level</dt>
+  <dd class="col-7"><%= student.year_level %></dd>
 
-  <div>
-    <strong>Program:</strong>
-    <%= student.program %>
-  </div>
+  <dt class="col-5 text-muted fw-normal">Program</dt>
+  <dd class="col-7"><%= student.program %></dd>
 
-  <div>
-    <strong>Department:</strong>
-    <%= student.department.name %>
-  </div>
-
-</div>
+  <dt class="col-5 text-muted fw-normal">Department</dt>
+  <dd class="col-7 mb-0"><%= student.department.name %></dd>
+</dl>

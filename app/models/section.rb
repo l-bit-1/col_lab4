@@ -1,5 +1,5 @@
 class Section < ApplicationRecord
-  belongs_to :subject
+  belongs_to :subject, counter_cache: :section_count
   has_many :classlists, dependent: :destroy
   has_many :students, through: :classlists
 

@@ -1,37 +1,132 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, @student.name %>
 
-<%= render @student %>
-
-<% if @student.classlists.any? %>
-  <h3>List of Subjects:</h3>
-  <table>
-    <thead> 
-      <tr>
-        <th>Name</th>
-        <th>Section</th>
-        <th>Room</th>
-        <th>Timeslot</th>
-        <th>Teacher</th>
-
-      </tr>
-    </thead>
-    <tbody>
-      <% @student.classlists.each do |classlist| %>
-        <tr>
-          <td><%= classlist.section.subject.name %></td>
-          <td><%= classlist.section.name %></td>
-          <td><%= classlist.section.room %></td>
-          <td><%= classlist.section.timeslot %></td>
-          <td><%= classlist.section.subject.teacher.name %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+<% if notice.present? %>
+  <div class="alert alert-success"><%= notice %></div>
+<% end %>
+<% if alert.present? %>
+  <div class="alert alert-danger"><%= alert %></div>
 <% end %>
 
-<div>
-  <%= link_to "Edit this student", edit_student_path(@student) %> |
-  <%= link_to "Back to students", students_path %>
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-4">
+  <div>
+    <h1 class="mb-1"><%= @student.name %></h1>
+    <p class="text-muted mb-0">
+      <%= @student.program %> &middot; Year <%= @student.year_level %>
+    </p>
+  </div>
 
-  <%= button_to "Destroy this student", @student, method: :delete %>
+  <div class="d-flex flex-wrap gap-2">
+    <%= link_to "Edit", edit_student_path(@student), class: "btn btn-secondary" %>
+    <%= link_to "Back to Students", students_path, class: "btn btn-outline-secondary" %>
+    <%= button_to "Delete", @student, method: :delete, class: "btn btn-danger" %>
+  </div>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">Student Details</div>
+      <div class="card-body">
+        <%= render @student %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header">Enrollment Summary</div>
+      <div class="card-body">
+        <div class="row text-center">
+          <div class="col">
+            <div class="fs-3 fw-bold"><%= @student.subjects_count %></div>
+            <div class="small text-muted">Subjects</div>
+          </div>
+          <div class="col border-start">
+            <div class="fs-3 fw-bold"><%= @student.number_of_units %></div>
+            <div class="small text-muted">Units</div>
+          </div>
+          <div class="col border-start">
+            <div class="fs-3 fw-bold"><%= number_to_currency @student.tuition_fee, unit: "P" %></div>
+            <div class="small text-muted">Tuition Fee</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card mb-4">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <span>Enrolled Subjects</span>
+    <span class="badge text-bg-secondary"><%= @student.classlists.size %></span>
+  </div>
+
+  <% if @student.classlists.any? %>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Section</th>
+            <th>Room</th>
+            <th>Timeslot</th>
+            <th>Teacher</th>
+            <th>Units</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @student.classlists.each do |classlist| %>
+            <tr>
+              <td><%= classlist.section.subject.name %></td>
+              <td><%= classlist.section.name %></td>
+              <td><%= classlist.section.room %></td>
+              <td><%= classlist.section.timeslot %></td>
+              <td><%= classlist.section.subject.teacher.name %></td>
+              <td><%= classlist.section.subject.number_of_units %></td>
+              <td class="text-end">
+                <%= button_to "Drop", classlist_path(classlist, from_student: @student.id),
+                              method: :delete, class: "btn btn-sm btn-outline-danger" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="card-body text-muted">
+      This student is not enrolled in any subject yet.
+    </div>
+  <% end %>
+</div>
+
+<div class="card">
+  <div class="card-header">Enroll in a Section</div>
+  <div class="card-body">
+    <% if @available_sections.any? %>
+      <%# row g-2 align-items-end puts the dropdown and the button on one line. %>
+      <%= form_with(model: @classlist, url: classlists_path, class: "row g-2 align-items-end") do |form| %>
+        <%= form.hidden_field :student_id, value: @student.id %>
+        <%= hidden_field_tag :from_student, @student.id %>
+
+        <div class="col-sm-8">
+          <%= form.label :section_id, "Section", class: "form-label" %>
+          <%= form.collection_select :section_id,
+                                     @available_sections,
+                                     :id,
+                                     :display_name,
+                                     { prompt: "Select a section" },
+                                     { class: "form-select" } %>
+        </div>
+
+        <div class="col-sm-4">
+          <%= form.submit "Enroll", class: "btn btn-primary w-100" %>
+        </div>
+      <% end %>
+    <% else %>
+      <p class="text-muted mb-0">
+        This student is already enrolled in every available section.
+      </p>
+    <% end %>
+  </div>
 </div>

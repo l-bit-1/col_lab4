@@ -22,13 +22,20 @@ class ClasslistsController < ApplicationController
   # POST /classlists or /classlists.json
   def create
     @classlist = Classlist.new(classlist_params)
+    student = Student.find_by(id: params[:from_student])
 
     respond_to do |format|
       if @classlist.save
-        format.html { redirect_to @classlist, notice: "Classlist was successfully created." }
+        format.html { redirect_to student || @classlist, notice: "Classlist was successfully created." }
         format.json { render :show, status: :created, location: @classlist }
       else
-        format.html { render :new, status: :unprocessable_content }
+        format.html do
+          if student
+            redirect_to student, alert: @classlist.errors.full_messages.to_sentence, status: :see_other
+          else
+            render :new, status: :unprocessable_content
+          end
+        end
         format.json { render json: @classlist.errors, status: :unprocessable_content }
       end
     end
@@ -49,10 +56,12 @@ class ClasslistsController < ApplicationController
 
   # DELETE /classlists/1 or /classlists/1.json
   def destroy
+    student = Student.find_by(id: params[:from_student])
+
     @classlist.destroy!
 
     respond_to do |format|
-      format.html { redirect_to classlists_path, notice: "Classlist was successfully destroyed.", status: :see_other }
+      format.html { redirect_to student || classlists_path, notice: "Classlist was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end

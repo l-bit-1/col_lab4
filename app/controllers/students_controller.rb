@@ -3,11 +3,13 @@ class StudentsController < ApplicationController
 
   # GET /students or /students.json
   def index
-    @students = Student.all
+    @students = Student.order(:name)
   end
 
   # GET /students/1 or /students/1.json
   def show
+    @classlist = Classlist.new(student: @student)
+    @available_sections = Section.where.not(id: @student.section_ids).order(:name)
   end
 
   # GET /students/new

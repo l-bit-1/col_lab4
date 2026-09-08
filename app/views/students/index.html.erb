@@ -1,16 +1,49 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Students" %>
+
+<% if notice.present? %>
+  <div class="alert alert-success"><%= notice %></div>
+<% end %>
 
 <h1>Students</h1>
 
-<div id="students">
-  <% @students.each do |student| %>
-    <%= render student %>
-    <p>
-      <%= link_to "Show this student", student %>
-    </p>
-  <% end %>
+<div id="students" class="table-responsive">
+  <table class="table table-striped table-hover table-bordered align-middle">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Year Level</th>
+        <th>Program</th>
+        <th>Department</th>
+        <th>Subjects</th>
+        <th>Units</th>
+        <th>Tuition Fee</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @students.each do |student| %>
+        <tr id="<%= dom_id student %>">
+          <td><%= student.name %></td>
+          <td><%= student.year_level %></td>
+          <td><%= student.program %></td>
+          <td><%= student.department.name %></td>
+          <td><%= student.subjects_count %></td>
+          <td><%= student.number_of_units %></td>
+          <td><%= number_to_currency student.tuition_fee, unit: "P" %></td>
+          <td class="text-nowrap">
+            <%# button_to makes a <form> for each button, and a form is normally %>
+            <%# a block, so the buttons would stack. d-inline-block puts them in a row. %>
+            <%= button_to "Show", student, method: :get,
+                          class: "btn btn-sm btn-primary", form_class: "d-inline-block" %>
+            <%= button_to "Edit", edit_student_path(student), method: :get,
+                          class: "btn btn-sm btn-secondary", form_class: "d-inline-block" %>
+            <%= button_to "Delete", student, method: :delete,
+                          class: "btn btn-sm btn-danger", form_class: "d-inline-block" %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
 </div>
 
-<%= link_to "New student", new_student_path %>
+<%= link_to "New student", new_student_path, class: "btn btn-success" %>
