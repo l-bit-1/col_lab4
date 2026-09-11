@@ -5,11 +5,23 @@
 <h1>Classlists</h1>
 
 <div id="classlists">
-  <% @classlists.each do |classlist| %>
-    <%= render classlist %>
-    <p>
-      <%= link_to "Show this classlist", classlist %>
-    </p>
+  <% @classlists.group_by(&:section).each do |section, classlists| %>
+    <div class="mb-4">
+      <h3>
+        <%= section.subject.name %> - <%= section.name %>
+      </h3>
+
+      <div class="row">
+        <% classlists.each do |classlist| %>
+          <div class="col-auto me-5">
+            <%= render classlist %>
+            <p>
+              <%= link_to "Show this classlist", classlist %>
+            </p>
+          </div>
+        <% end %>
+      </div>
+    </div>
   <% end %>
 </div>
 

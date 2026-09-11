@@ -3,7 +3,7 @@ class ClasslistsController < ApplicationController
 
   # GET /classlists or /classlists.json
   def index
-    @classlists = Classlist.all
+    @classlists = Classlist.joins(:section).order("sections.name")
   end
 
   # GET /classlists/1 or /classlists/1.json

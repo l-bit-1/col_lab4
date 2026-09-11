@@ -4,12 +4,14 @@
 
 <h1>Laboratories</h1>
 
-<div id="laboratories">
+<div id="laboratories" class ="row">
   <% @laboratories.each do |laboratory| %>
+    <div class ="col-auto me-5">
     <%= render laboratory %>
     <p>
       <%= link_to "Show this laboratory", laboratory %>
     </p>
+    </div>
   <% end %>
 </div>
 
