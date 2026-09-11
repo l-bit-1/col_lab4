@@ -4,12 +4,14 @@
 
 <h1>Subjects</h1>
 
-<div id="subjects">
+<div id="subjects" class ="row">
   <% @subjects.each do |subject| %>
+    <div class="col-auto me-5">
     <%= render subject %>
     <p>
       <%= link_to "Show this subject", subject %>
     </p>
+    </div>
   <% end %>
 </div>
 

@@ -4,12 +4,14 @@
 
 <h1>Teachers</h1>
 
-<div id="teachers">
+<div id="teachers" class ="row">
   <% @teachers.each do |teacher| %>
+    <div class="col-auto me-5">
     <%= render teacher %>
     <p>
       <%= link_to "Show this teacher", teacher %>
     </p>
+    </div>
   <% end %>
 </div>
 
