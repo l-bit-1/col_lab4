@@ -2,23 +2,24 @@
 
 <%= render @section %>
 
+<h3>List of Students:</h3>
 <% if @section.classlists.any? %>
-  <h3>List of Students:</h3>
-  <table>
+  <table class="table">
     <thead> 
       <tr>
-        <th>Name</th>
+        <th class="pe-5">Name</th>
+        <th class="pe-5">Program</th>
         <th>Year Level</th>
-        <th>Program</th>
 
       </tr>
     </thead>
+
     <tbody>
-      <% @section.classlists.each do |classlist| %>
+    <% @section.classlists.each do |classlist| %>
         <tr>
-          <td><%= classlist.student.name %></td>
+          <td class="pe-5"><%= classlist.student.name %></td>
+          <td class="pe-5"><%= classlist.student.program %></td>
           <td><%= classlist.student.year_level %></td>
-          <td><%= classlist.student.program %></td>
         </tr>
       <% end %>
     </tbody>

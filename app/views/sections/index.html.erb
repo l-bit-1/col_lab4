@@ -9,10 +9,14 @@
     <div class="col-auto me-5">
     <%= render section %>
     <p>
-      <%= link_to "Show this section", section %>
+      <%= link_to "Show this section", 
+      section,
+      class: "btn btn-primary mt-2"%>
     </p>
     </div>
   <% end %>
 </div>
 
-<%= link_to "New section", new_section_path %>
+<%= link_to "New section", 
+new_section_path,
+class: "btn btn-success" %>
