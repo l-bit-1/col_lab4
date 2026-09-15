@@ -3,44 +3,59 @@
 <%= render @subject %>
 
 <% if @subject.sections.any? %>
-  <h2>Sections</h2>
+  <h2 class="mt-4">Sections</h2>
 
   <% @subject.sections.each do |section| %>
-    <h3><%= section.name %></h3>
-    <p>
-      Room: <%= section.room %> |
-      Timeslot: <%= section.timeslot %> |
-      Teacher: <%= @subject.teacher.name %>
-    </p>
+    <div class="card mb-3">
+      <div class="card-body">
+        <h3 class="card-title"><%= section.name %></h3>
 
-    <% if section.classlists.any? %>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Year Level</th>
-            <th>Program</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% section.classlists.each do |classlist| %>
-            <tr>
-              <td><%= classlist.student.name %></td>
-              <td><%= classlist.student.year_level %></td>
-              <td><%= classlist.student.program %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% else %>
-      <p>No students enrolled in this section yet.</p>
-    <% end %>
+        <p class="card-text">
+          <strong>Room:</strong> <%= section.room %>
+          <span class="mx-2">|</span>
+          <strong>Timeslot:</strong> <%= section.timeslot %>
+          <span class="mx-2">|</span>
+          <strong>Teacher:</strong> <%= @subject.teacher.name %>
+        </p>
+
+        <% if section.classlists.any? %>
+          <h5 class="mt-3">Students</h5>
+
+          <table class="table">
+            <thead>
+              <tr>
+                <th class="pe-5">Name</th>
+                <th class="pe-5">Year Level</th>
+                <th>Program</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <% section.classlists.each do |classlist| %>
+                <tr>
+                  <td class="pe-5"><%= classlist.student.name %></td>
+                  <td class="pe-5"><%= classlist.student.year_level %></td>
+                  <td><%= classlist.student.program %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        <% else %>
+          <p class="text-muted fst-italic mb-0">
+            Wow, such empty.
+          </p>
+        <% end %>
+      </div>
+    </div>
   <% end %>
+
 <% else %>
-  <p>This subject has no sections yet.</p>
+  <p class="text-muted fst-italic">
+    Wow, such empty.
+  </p>
 <% end %>
 
-<div class="d-flex gap-2">
+<div class="d-flex gap-2 mt-4">
   <%= link_to "Edit this subject",
       edit_subject_path(@subject),
       class: "btn btn-warning" %>
