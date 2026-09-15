@@ -82,10 +82,6 @@
           <%# nav-pills + flex-column stacks the links vertically. %>
           <ul class="nav nav-pills flex-column gap-1">
             <li class="nav-item">
-              <%= sidebar_link "Students", students_path, "students", "bi-people" %>
-            </li>
-
-            <li class="nav-item">
               <%= sidebar_link "Departments", departments_path, "departments", "bi-building" %>
             </li>
 
@@ -99,6 +95,10 @@
 
             <li class="nav-item">
               <%= sidebar_link "Sections", sections_path, "sections", "bi-collection" %>
+            </li>
+
+            <li class="nav-item">
+              <%= sidebar_link "Students", students_path, "students", "bi-people" %>
             </li>
 
             <li class="nav-item">
