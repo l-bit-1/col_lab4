@@ -2,9 +2,17 @@
 
 <%= render @laboratory %>
 
-<div>
-  <%= link_to "Edit this laboratory", edit_laboratory_path(@laboratory) %> |
-  <%= link_to "Back to laboratories", laboratories_path %>
+<div class="d-flex gap-2">
+  <%= link_to "Edit this laboratory",
+      edit_laboratory_path(@laboratory),
+      class: "btn btn-warning" %>
 
-  <%= button_to "Destroy this laboratory", @laboratory, method: :delete %>
+  <%= link_to "Back to laboratories",
+      laboratories_path,
+      class: "btn btn-secondary" %>
+
+  <%= button_to "Destroy this laboratory",
+      @laboratory,
+      method: :delete,
+      class: "btn btn-danger" %>
 </div>
