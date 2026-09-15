@@ -3,8 +3,8 @@
 <%= render @classlist %>
 
 <div>
-  <%= link_to "Edit this classlist", edit_classlist_path(@classlist) %> |
+  <%= link_to "Edit this student", edit_classlist_path(@classlist) %> |
   <%= link_to "Back to classlists", classlists_path %>
 
-  <%= button_to "Destroy this classlist", @classlist, method: :delete %>
+  <%= button_to "Remove from classlist", @classlist, method: :delete %>
 </div>
