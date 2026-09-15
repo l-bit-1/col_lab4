@@ -4,15 +4,16 @@
 
 <h1>Departments</h1>
 
-<div id="departments" class ="row">
+<div id="departments" class="row g-3">
   <% @departments.each do |department| %>
-    <div class = "col-auto me-5">
-    <%= render department %>
-    <p>
-      <%= link_to "Show this department", department %>
-    </p>
+    <div class="col-md-3">
+      <%= render department %>
     </div>
   <% end %>
 </div>
 
-<%= link_to "New department", new_department_path %>
+<div class="mt-4">
+  <%= link_to "New department",
+      new_department_path,
+      class: "btn btn-success" %>
+</div>

@@ -1,6 +1,8 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @department %>
+<div class="col-md-2">
+  <%= render "department_info", department: @department %>
+</div>  
 <h3>List of Teachers:</h3>
 <% if @department.teachers.any? %>
   <ul>
@@ -12,6 +14,8 @@
         </li>
     <% end %>
 </ul>
+<% else %>
+  <p class="text-muted fst-italic">Wow, such empty.</p>
 <% end %>
 
 <h3>Used Laboratories:</h3>
@@ -24,28 +28,34 @@
           </li>
       <% end %>
 </ul>
+<% else %>
+  <p class="text-muted fst-italic">Wow, such empty.</p>
 <% end %>
 
+
+<h3>List of estudyent:</h3>
 <% if @department.students.any? %>
-  <h3>List of estudyent:</h3>
-  <table>
-    <thead>
+  <table class="table">
+  <thead>
+    <tr>
+      <th class="pe-5">Name</th>
+      <th class="pe-5">Program</th>
+      <th>Year Level</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @department.students.each do |student| %>
       <tr>
-        <th>Name</th>
-        <th>Program</th>
-        <th>Year Level</th>
+        <td class="pe-5"><%= student.name %></td>
+        <td class="pe-5"><%= student.program %></td>
+        <td><%= student.year_level %></td>
       </tr>
-    </thead>
-    <tbody>
-      <% @department.students.each do |student| %>
-        <tr>
-          <td><%= student.name %></td>
-          <td><%= student.program %></td>
-          <td><%= student.year_level%></td>
-        </tr>
-        <% end %>
-        </tbody>
-        </table>
+    <% end %>
+  </tbody>
+</table>
+        <% else %>
+  <p class="text-muted fst-italic">Wow, such empty.</p>
         <% end %>
 
 <div class="d-flex gap-2">
