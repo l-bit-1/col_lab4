@@ -4,9 +4,9 @@
 
 <h1>Sections</h1>
 
-<div id="sections" class ="row">
+<div id="sections" class ="row g-1">
   <% @sections.each do |section| %>
-    <div class="col-auto me-5">
+    <div class="col-auto">
     <%= render section %>
     <p>
       <%= link_to "Show this section", 
