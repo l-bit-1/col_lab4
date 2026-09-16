@@ -1,28 +1,46 @@
 <p style="color: green"><%= notice %></p>
 
-<%= render @teacher %>
+<h1><%= @teacher.name %></h1>
+
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">Teacher Information</h5>
+    <p><strong>Per Unit Rate:</strong> <%= number_to_currency(@teacher.per_unit_rate, unit: "₱") %></p>
+
+    <div class="alert alert-success">
+      <strong>Monthly Salary:</strong> <%= number_to_currency(@teacher.monthly_salary, unit: "₱") %>
+    </div>
+  </div>
+</div>
 
 <% if @teacher.subjects.any? %>
-  <h3>List of Subjects:</h3>
-  <table>
-    <thead>
-      <tr>
-        <th>Name</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @teacher.subjects.each do |subject| %>
-        <tr>
-          <td><%= subject.name %></td>
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
+  <div class="card mb-4">
+    <div class="card-body">
+      <h5 class="card-title">Assigned Subjects</h5>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Units</th>
+            <th>Salary Contribution</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @teacher.subjects.each do |subject| %>
+            <tr>
+              <td><%= subject.name %></td>
+              <td><%= subject.number_of_units %></td>
+              <td><%= number_to_currency(subject.number_of_units * @teacher.per_unit_rate, unit: "₱") %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
 <% end %>
 
-<div>
-  <%= link_to "Edit this teacher", edit_teacher_path(@teacher) %> |
-  <%= link_to "Back to teachers", teachers_path %>
-
-  <%= button_to "Destroy this teacher", @teacher, method: :delete %>
+<div class="d-flex gap-2">
+  <%= link_to "Edit this teacher", edit_teacher_path(@teacher), class: "btn btn-secondary" %>
+  <%= link_to "Back to teachers", teachers_path, class: "btn btn-outline-secondary" %>
+  <%= button_to "Destroy this teacher", @teacher, method: :delete, class: "btn btn-danger" %>
 </div>

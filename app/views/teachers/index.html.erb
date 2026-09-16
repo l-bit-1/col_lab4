@@ -4,15 +4,35 @@
 
 <h1>Teachers</h1>
 
-<div id="teachers" class ="row">
-  <% @teachers.each do |teacher| %>
-    <div class="col-auto me-5">
-    <%= render teacher %>
-    <p>
-      <%= link_to "Show this teacher", teacher %>
-    </p>
-    </div>
-  <% end %>
-</div>
+<table class="table table-striped table-hover align-middle">
+  <thead class="table-dark">
+    <tr>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Specialization</th>
+      <th>Department</th>
+      <th>Monthly Salary</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @teachers.each do |teacher| %>
+      <tr>
+        <td><%= teacher.name %></td>
+        <td><%= teacher.email %></td>
+        <td><%= teacher.specialization %></td>
+        <td><%= teacher.department.name %></td>
+        <td><%= number_to_currency(teacher.monthly_salary, unit: "₱") %></td>
+        <td>
+          <div class="d-flex gap-2">
+          <%= link_to "Show", teacher, class: "btn btn-primary btn-sm" %>
+          <%= link_to "Edit", edit_teacher_path(teacher), class: "btn btn-secondary btn-sm" %>
+          <%= button_to "Delete", teacher, method: :delete, class: "btn btn-danger btn-sm" %>
+          </div>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
 
-<%= link_to "New teacher", new_teacher_path %>
+<%= link_to "New teacher", new_teacher_path, class: "btn btn-success" %>
