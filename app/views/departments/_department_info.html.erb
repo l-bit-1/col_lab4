@@ -1,16 +1,12 @@
-<div id="<%= dom_id department %>" class="card shadow-sm">
+<div class="card shadow-sm">
   <div class="card-body">
     <h5 class="card-title">
       <%= department.name %>
     </h5>
 
-    <p class="card-text">
+    <p class="card-text mb-0">
       <strong>Location:</strong>
       <%= department.location %>
     </p>
-
-    <%= link_to "Show this department",
-        department,
-        class: "btn btn-primary" %>
   </div>
 </div>

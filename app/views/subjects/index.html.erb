@@ -4,15 +4,24 @@
 
 <h1>Subjects</h1>
 
-<div id="subjects" class ="row">
+<div id="subjects" class="row g-2">
   <% @subjects.each do |subject| %>
-    <div class="col-auto me-5">
-    <%= render subject %>
-    <p>
-      <%= link_to "Show this subject", subject %>
-    </p>
+    <div class="col-md-3">
+      <div class="card">
+        <div class="card-body">
+          <%= render subject %>
+
+          <%= link_to "Show this subject",
+              subject,
+              class: "btn btn-primary mt-2" %>
+        </div>
+      </div>
     </div>
   <% end %>
 </div>
 
-<%= link_to "New subject", new_subject_path %>
+<div class="mt-4">
+  <%= link_to "New subject",
+      new_subject_path,
+      class: "btn btn-success" %>
+</div>
