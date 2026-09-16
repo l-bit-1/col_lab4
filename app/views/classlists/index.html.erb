@@ -2,27 +2,58 @@
 
 <% content_for :title, "Classlists" %>
 
-<h1>Classlists</h1>
+<h1 class="mb-4">Classlists</h1>
 
-<div id="classlists">
+<div id="classlists" class="row g-4">
   <% @classlists.group_by(&:section).each do |section, classlists| %>
-    <div class="mb-4">
-      <h3>
-        <%= section.subject.name %> - <%= section.name %>
-      </h3>
+    <div class="col-md-4">
+      <div class="card shadow-sm h-100">
 
-      <div class="row">
-        <% classlists.each do |classlist| %>
-          <div class="col-auto me-5">
-            <%= render classlist %>
-            <p>
-              <%= link_to "Show this student", classlist %>
-            </p>
-          </div>
-        <% end %>
-      </div>
+
+    <Section Header>
+    <div class="card-header">
+      <h4 class="mb-0">
+        <%= section.subject.name %> - <%= section.name %>
+      </h4>
     </div>
-  <% end %>
+
+    <Students>
+    <div class="card-body">
+      <% classlists.each do |classlist| %>
+        <div class="card mb-3">
+          <div class="card-body">
+            <%= render classlist %>
+
+            <div class="d-flex gap-2 mt-3">
+              <%= link_to "Show",
+                  classlist,
+                  class: "btn btn-primary btn-sm" %>
+
+              <%= link_to "Edit",
+                  edit_classlist_path(classlist),
+                  class: "btn btn-warning btn-sm" %>
+
+              <%= button_to "Delete",
+                  classlist,
+                  method: :delete,
+                  class: "btn btn-danger btn-sm",
+                  data: { turbo_confirm: "Are you sure?" } %>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+  </div>
 </div>
 
-<%= link_to "New classlist", new_classlist_path %>
+
+<% end %>
+
+</div>
+
+<div class="mt-4">
+  <%= link_to "New Classlist",
+      new_classlist_path,
+      class: "btn btn-success" %>
+</div>

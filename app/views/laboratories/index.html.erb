@@ -2,17 +2,40 @@
 
 <% content_for :title, "Laboratories" %>
 
-<h1>Laboratories</h1>
+<h1 class="mb-4">Laboratories</h1>
 
-<div id="laboratories" class ="row">
+<div id="laboratories" class="row g-4">
   <% @laboratories.each do |laboratory| %>
-    <div class ="col-auto me-5">
-    <%= render laboratory %>
-    <p>
-      <%= link_to "Show this laboratory", laboratory %>
-    </p>
+    <div class="col-md-4 col-lg-3">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <%= render laboratory %>
+
+      <div class="d-flex gap-2 mt-3">
+        <%= link_to "Show",
+            laboratory,
+            class: "btn btn-primary btn-sm" %>
+
+        <%= link_to "Edit",
+            edit_laboratory_path(laboratory),
+            class: "btn btn-warning btn-sm" %>
+
+        <%= button_to "Delete",
+            laboratory,
+            method: :delete,
+            class: "btn btn-danger btn-sm",
+            data: { turbo_confirm: "Are you sure?" } %>
+      </div>
     </div>
-  <% end %>
+  </div>
 </div>
 
-<%= link_to "New laboratory", new_laboratory_path %>
+<% end %>
+
+</div>
+
+<div class="mt-4">
+  <%= link_to "New Laboratory",
+      new_laboratory_path,
+      class: "btn btn-success" %>
+</div>
