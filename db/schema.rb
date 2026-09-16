@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_08_080522) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_15_152607) do
   create_table "classlists", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.bigint "section_id", null: false
@@ -22,8 +22,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_080522) do
 
   create_table "departments", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.datetime "created_at", null: false
+    t.integer "laboratories_count"
     t.string "location"
     t.string "name"
+    t.integer "students_count"
+    t.integer "teachers_count"
     t.datetime "updated_at", null: false
   end
 
@@ -76,6 +79,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_08_080522) do
     t.bigint "department_id", null: false
     t.string "email"
     t.string "name"
+    t.decimal "per_unit_rate", precision: 10
     t.string "specialization"
     t.datetime "updated_at", null: false
     t.index ["department_id"], name: "index_teachers_on_department_id"
