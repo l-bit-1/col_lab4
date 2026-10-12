@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  root "home#index"
+
   resources :laboratories
   resources :classlists
   resources :sections
