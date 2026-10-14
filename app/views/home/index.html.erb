@@ -1,0 +1,128 @@
+<div class="p-5 mb-4 bg-body-tertiary rounded-3">
+  <h1 class="display-5 fw-bold">Department Student Directory</h1>
+  <p class="lead">Explore the people, programs, and academic structure of the department.</p>
+
+  <div class="d-flex gap-2">
+    <%= link_to "Browse Students", students_path, class: "btn btn-primary btn-lg" %>
+    <%= link_to "Browse Teachers", teachers_path, class: "btn btn-outline-secondary btn-lg" %>
+  </div>
+</div>
+
+<h2 class="h4 mb-3">Explore the Directory</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-sm-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h3 class="card-title h5">Departments</h3>
+        <p class="card-text text-body-secondary">Offices and where to find them.</p>
+        <%= link_to "View all", departments_path, class: "btn btn-sm btn-primary" %>
+        <%= link_to "Add new", new_department_path, class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h3 class="card-title h5">Students</h3>
+        <p class="card-text text-body-secondary">Everyone enrolled in the department.</p>
+        <%= link_to "View all", students_path, class: "btn btn-sm btn-primary" %>
+        <%= link_to "Add new", new_student_path, class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 col-lg-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h3 class="card-title h5">Teachers</h3>
+        <p class="card-text text-body-secondary">The faculty and what they teach.</p>
+        <%= link_to "View all", teachers_path, class: "btn btn-sm btn-primary" %>
+        <%= link_to "Add new", new_teacher_path, class: "btn btn-sm btn-outline-secondary" %>
+      </div>
+    </div>
+  </div>
+
+  <%# Task 6: add Subjects and Sections cards here, same pattern. %>
+  <%# Use subjects_path / new_subject_path and sections_path / new_section_path. %>
+</div>
+
+<h2 class="h4 mb-3">Directory Overview</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <div class="display-6 fw-bold"><%= @department_count %></div>
+        <div class="text-body-secondary">Departments</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <div class="display-6 fw-bold"><%= @teacher_count %></div>
+        <div class="text-body-secondary">Teachers</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <div class="display-6 fw-bold"><%= @student_count %></div>
+        <div class="text-body-secondary">Students</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <div class="display-6 fw-bold"><%= @subject_count %></div>
+        <div class="text-body-secondary">Subjects</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <div class="display-6 fw-bold"><%= @section_count %></div>
+        <div class="text-body-secondary">Sections</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-6 col-md-4 col-xl-2">
+    <div class="card text-center h-100">
+      <div class="card-body">
+        <div class="display-6 fw-bold"><%= @class_list_count %></div>
+        <div class="text-body-secondary">Class Lists</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="h4 mb-3">Meet Our Faculty</h2>
+
+<div class="row g-3 mb-4">
+  <% @teachers.each do |teacher| %>
+    <div class="col-sm-6 col-lg-4">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <%= image_tag "avatar.svg", alt: teacher.name,
+                width: 96, height: 96, class: "rounded-circle mb-3" %>
+          <h3 class="card-title h5"><%= teacher.name %></h3>
+          <p class="card-text text-body-secondary"><%= teacher.specialization %></p>
+          <p class="card-text small text-body-secondary"><%= teacher.department.name %></p>
+          <%= link_to "View profile", teacher, class: "btn btn-sm btn-outline-primary" %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%= link_to "See all faculty →", teachers_path, class: "btn btn-link" %>

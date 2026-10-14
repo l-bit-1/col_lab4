@@ -15,3 +15,47 @@
   display: block;
   margin: 0 auto;
 }
+@media (min-width: 768px) {
+  #sidebar {
+    transition: margin-left 0.3s ease;
+  }
+
+  html.sidebar-collapsed #sidebar {
+    margin-left: -230px; /* same as the sidebar's width */
+  }
+
+  .sidebar-tab {
+    position: fixed;
+    top: 1rem;
+    left: 230px; /* sits flush against the sidebar's right edge */
+    z-index: 1030;
+    width: 26px;
+    height: 56px;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    border: 0;
+    border-radius: 0 0.5rem 0.5rem 0;
+    background-color: var(--bs-dark);
+    color: #adb5bd;
+    box-shadow: 3px 0 6px rgba(0, 0, 0, 0.15);
+    transition: left 0.3s ease, color 0.15s ease, width 0.15s ease;
+  }
+
+  .sidebar-tab:hover {
+    color: #fff;
+    width: 32px;
+  }
+
+  .sidebar-tab i {
+    transition: transform 0.3s ease;
+  }
+
+  html.sidebar-collapsed .sidebar-tab {
+    left: 0;
+  }
+
+  html.sidebar-collapsed .sidebar-tab i {
+    transform: rotate(180deg); /* chevron now points right, meaning "open" */
+  }
+}

@@ -56,6 +56,13 @@
     </div>
 
     <div class="d-flex">
+
+
+      <button class="sidebar-tab d-none d-md-flex" type="button"
+              data-sidebar-toggle aria-label="Toggle sidebar">
+        <i class="bi bi-chevron-left"></i>
+      </button>
+      
       <div
         class="offcanvas-md offcanvas-start bg-dark text-white flex-shrink-0 min-vh-100"
         id="sidebar"
@@ -85,6 +92,10 @@
 
           <%# nav-pills + flex-column stacks the links vertically. %>
           <ul class="nav nav-pills flex-column gap-1">
+            <li class="nav-item">
+              <%= sidebar_link "Home", root_path, "home", "bi-house-door" %>
+            </li>
+
             <li class="nav-item">
               <%= sidebar_link "Departments", departments_path, "departments", "bi-building" %>
             </li>
