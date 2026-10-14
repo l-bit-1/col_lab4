@@ -3,7 +3,7 @@ class Teacher < ApplicationRecord
   has_many :subjects, dependent: :destroy
 
   def monthly_salary
-    subjects.sum(:number_of_units) * per_unit_rate
+    subjects.sum(:number_of_units) * (per_unit_rate || 0)
   end
 
 end
