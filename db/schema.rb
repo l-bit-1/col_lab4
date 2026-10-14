@@ -78,8 +78,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_15_152607) do
     t.datetime "created_at", null: false
     t.bigint "department_id", null: false
     t.string "email"
+    t.float "monthly_salary", default: 0.0
     t.string "name"
-    t.decimal "per_unit_rate", precision: 10
+    t.float "per_unit_rate", default: 0.0
     t.string "specialization"
     t.datetime "updated_at", null: false
     t.index ["department_id"], name: "index_teachers_on_department_id"
