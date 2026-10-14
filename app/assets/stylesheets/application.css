@@ -8,6 +8,13 @@
  *
  * Consider organizing styles into separate files for maintainability.
  */
+.school-logo {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+}
 @media (min-width: 768px) {
   #sidebar {
     transition: margin-left 0.3s ease;
