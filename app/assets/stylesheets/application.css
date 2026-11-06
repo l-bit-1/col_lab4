@@ -58,4 +58,110 @@
   html.sidebar-collapsed .sidebar-tab i {
     transform: rotate(180deg); /* chevron now points right, meaning "open" */
   }
+  .autocomplete-menu {
+  z-index: 1050;
+  transform-origin: top;
+  animation: autocomplete-in 0.15s ease-out;
+    }
+
+      @keyframes autocomplete-in {
+       from { opacity: 0; transform: translateY(-8px) scaleY(0.95); }
+        to   { opacity: 1; transform: translateY(0) scaleY(1); }
+    }
+
+.home-backdrop {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 85vh;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.home-backdrop__image {
+  position: absolute;
+  inset: -20px;               /* oversized so the blur doesn't show soft edges */
+  background-size: cover;
+  background-position: 70% 20%;
+}
+
+/* static fade so the image melts into the page even at scroll position 0 */
+.home-backdrop__fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 40%, #fff 100%);
+}
+
+/* animated by the controller: 0 = clear, 1 = solid white */
+.home-backdrop__veil {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  opacity: 0;
+}
+
+:root { --adnu-navy: #1b2f6b; }
+.text-navy { color: var(--adnu-navy); }
+
+/* frosted glass: lets the photo show through a little */
+.glass {
+  background: rgba(255, 255, 255, 0.48);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+}
+
+/* leaves the top of the screen open for the photo */
+.home-hero {
+  min-height: 42vh;
+  display: flex;
+  align-items: flex-end;
+  padding-bottom: 1.5rem;
+}
+.home-hero__panel { width: 100%; max-width: 640px; }
+
+.stat-card { transition: transform .15s ease, box-shadow .15s ease; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.12); }
+
+.avatar-chip {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: var(--adnu-navy);
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: .8rem; font-weight: 600;
+}
+
+/* ---------- sidebar glide ---------- */
+.sidebar-nav { position: relative; }
+
+.sidebar-nav a {
+  position: relative;
+  z-index: 1;                 /* text sits above the pill */
+  display: block;
+  padding: .5rem 1rem;
+  border-radius: .375rem;
+  color: rgba(255,255,255,.85);
+  text-decoration: none;
+  background: transparent !important;
+  transition: color .2s ease, background-color .2s ease;
+}
+.sidebar-nav a.active { color: #fff; }
+.sidebar-nav a:not(.active):hover { background: rgba(255,255,255,.08) !important; }
+
+.sidebar-pill {
+  position: absolute;
+  top: 0; left: 0;
+  z-index: 0;
+  border-radius: .375rem;
+  background: #0d6efd;        /* same blue as the old highlight */
+  opacity: 0;
+  pointer-events: none;
+}
+.sidebar-pill.is-ready {
+  transition: transform .35s cubic-bezier(.4, 0, .2, 1),
+              width .35s cubic-bezier(.4, 0, .2, 1),
+              height .35s cubic-bezier(.4, 0, .2, 1),
+              opacity .2s ease;
+}
 }

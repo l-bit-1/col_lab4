@@ -5,7 +5,17 @@ Rails.application.routes.draw do
   resources :classlists
   resources :sections
   resources :subjects
-  resources :teachers
-  resources :students
   resources :departments
+
+  resources :students do
+    collection do
+     get :search
+   end
+  end
+
+  resources :teachers do
+  collection do
+    get :search
+   end
+  end
 end

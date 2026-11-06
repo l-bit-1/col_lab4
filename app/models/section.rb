@@ -6,4 +6,8 @@ class Section < ApplicationRecord
   def display_name
     [ subject&.name, name ].compact_blank.join(" - ")
   end
+
+  def self.ransackable_attributes(auth_object = nil)
+    %w[room timeslot]
+  end
 end

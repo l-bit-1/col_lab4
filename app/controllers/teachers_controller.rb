@@ -6,6 +6,18 @@ class TeachersController < ApplicationController
     @teachers = Teacher.all
   end
 
+# GET /teachers/search?q=ep
+def search
+  return render(json: []) if params[:q].blank?
+
+  teachers = Teacher.ransack(name_cont: params[:q]).result
+                    .includes(:department).order(:name).limit(8)
+
+  render json: teachers.map { |t|
+    { name: t.name, subtitle: t.department&.name, url: teacher_path(t) }
+  }
+end
+
   # GET /teachers/1 or /teachers/1.json
   def show
   end

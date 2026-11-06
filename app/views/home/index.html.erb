@@ -1,128 +1,78 @@
-<div class="p-5 mb-4 bg-body-tertiary rounded-3">
-  <h1 class="display-5 fw-bold">Department Student Directory</h1>
-  <p class="lead">Explore the people, programs, and academic structure of the department.</p>
-
-  <div class="d-flex gap-2">
-    <%= link_to "Browse Students", students_path, class: "btn btn-primary btn-lg" %>
-    <%= link_to "Browse Teachers", teachers_path, class: "btn btn-outline-secondary btn-lg" %>
-  </div>
+<%# Backdrop photo (same as before) %>
+<div class="home-backdrop" data-controller="backdrop" data-backdrop-distance-value="800">  <div class="home-backdrop__image"
+       data-backdrop-target="image"
+       style="background-image: url('<%= asset_path("ateneo_de_naga.jpg") %>')"></div>
+  <div class="home-backdrop__fade"></div>
+  <div class="home-backdrop__veil" data-backdrop-target="veil"></div>
 </div>
 
-<h2 class="h4 mb-3">Explore the Directory</h2>
+<%# Hero: short, left-aligned so the building stays visible on the right %>
+<section class="home-hero">
+  <div class="glass rounded-4 p-4 p-md-5 home-hero__panel">
+    <h1 class="fw-bold mb-1">Department Student Directory</h1>
+    <p class="text-body-secondary mb-3">Search for a student, or jump to any section below.</p>
 
-<div class="row g-3 mb-4">
-  <div class="col-sm-6 col-lg-4">
-    <div class="card h-100">
-      <div class="card-body">
-        <h3 class="card-title h5">Departments</h3>
-        <p class="card-text text-body-secondary">Offices and where to find them.</p>
-        <%= link_to "View all", departments_path, class: "btn btn-sm btn-primary" %>
-        <%= link_to "Add new", new_department_path, class: "btn btn-sm btn-outline-secondary" %>
-      </div>
+    <div class="position-relative"
+         data-controller="autocomplete"
+         data-autocomplete-url-value="<%= search_students_path %>">
+      <input type="search"
+             class="form-control form-control-lg"
+             placeholder="Search student name..."
+             autocomplete="off"
+             data-autocomplete-target="input"
+             data-action="input->autocomplete#search keydown->autocomplete#keydown">
+      <div class="list-group position-absolute w-100 shadow autocomplete-menu"
+           data-autocomplete-target="menu" hidden></div>
     </div>
   </div>
+</section>
 
-  <div class="col-sm-6 col-lg-4">
-    <div class="card h-100">
-      <div class="card-body">
-        <h3 class="card-title h5">Students</h3>
-        <p class="card-text text-body-secondary">Everyone enrolled in the department.</p>
-        <%= link_to "View all", students_path, class: "btn btn-sm btn-primary" %>
-        <%= link_to "Add new", new_student_path, class: "btn btn-sm btn-outline-secondary" %>
-      </div>
-    </div>
-  </div>
+<%# One card per entity: whole card is the "view all" link, + is "add new" %>
+<% cards = [
+  { label: "Students",    count: Student.count,    icon: "bi-people",       path: students_path,    new: new_student_path },
+  { label: "Teachers",    count: Teacher.count,    icon: "bi-person-badge", path: teachers_path,    new: new_teacher_path },
+  { label: "Departments", count: Department.count, icon: "bi-building",     path: departments_path, new: new_department_path },
+  { label: "Subjects",    count: Subject.count,    icon: "bi-book",         path: subjects_path,    new: new_subject_path },
+  { label: "Sections",    count: Section.count,    icon: "bi-collection",   path: sections_path,    new: new_section_path },
+  { label: "Class Lists", count: Classlist.count,  icon: "bi-list-check",   path: classlists_path,  new: new_classlist_path }
+] %>
 
-  <div class="col-sm-6 col-lg-4">
-    <div class="card h-100">
-      <div class="card-body">
-        <h3 class="card-title h5">Teachers</h3>
-        <p class="card-text text-body-secondary">The faculty and what they teach.</p>
-        <%= link_to "View all", teachers_path, class: "btn btn-sm btn-primary" %>
-        <%= link_to "Add new", new_teacher_path, class: "btn btn-sm btn-outline-secondary" %>
-      </div>
-    </div>
-  </div>
-
-  <%# Task 6: add Subjects and Sections cards here, same pattern. %>
-  <%# Use subjects_path / new_subject_path and sections_path / new_section_path. %>
-</div>
-
-<h2 class="h4 mb-3">Directory Overview</h2>
-
-<div class="row g-3 mb-4">
-  <div class="col-6 col-md-4 col-xl-2">
-    <div class="card text-center h-100">
-      <div class="card-body">
-        <div class="display-6 fw-bold"><%= @department_count %></div>
-        <div class="text-body-secondary">Departments</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-6 col-md-4 col-xl-2">
-    <div class="card text-center h-100">
-      <div class="card-body">
-        <div class="display-6 fw-bold"><%= @teacher_count %></div>
-        <div class="text-body-secondary">Teachers</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-6 col-md-4 col-xl-2">
-    <div class="card text-center h-100">
-      <div class="card-body">
-        <div class="display-6 fw-bold"><%= @student_count %></div>
-        <div class="text-body-secondary">Students</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-6 col-md-4 col-xl-2">
-    <div class="card text-center h-100">
-      <div class="card-body">
-        <div class="display-6 fw-bold"><%= @subject_count %></div>
-        <div class="text-body-secondary">Subjects</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-6 col-md-4 col-xl-2">
-    <div class="card text-center h-100">
-      <div class="card-body">
-        <div class="display-6 fw-bold"><%= @section_count %></div>
-        <div class="text-body-secondary">Sections</div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-6 col-md-4 col-xl-2">
-    <div class="card text-center h-100">
-      <div class="card-body">
-        <div class="display-6 fw-bold"><%= @class_list_count %></div>
-        <div class="text-body-secondary">Class Lists</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<h2 class="h4 mb-3">Meet Our Faculty</h2>
-
-<div class="row g-3 mb-4">
-  <% @teachers.each do |teacher| %>
-    <div class="col-sm-6 col-lg-4">
-      <div class="card h-100 text-center">
-        <div class="card-body">
-          <%= image_tag "avatar.svg", alt: teacher.name,
-                width: 96, height: 96, class: "rounded-circle mb-3" %>
-          <h3 class="card-title h5"><%= teacher.name %></h3>
-          <p class="card-text text-body-secondary"><%= teacher.specialization %></p>
-          <p class="card-text small text-body-secondary"><%= teacher.department.name %></p>
-          <%= link_to "View profile", teacher, class: "btn btn-sm btn-outline-primary" %>
+<section class="mb-4">
+  <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-3">
+    <% cards.each do |c| %>
+      <div class="col">
+        <div class="card glass stat-card h-100 position-relative">
+          <div class="card-body d-flex align-items-center gap-3">
+            <i class="bi <%= c[:icon] %> fs-2 text-navy"></i>
+            <div class="flex-grow-1">
+              <div class="fs-2 fw-bold lh-1"><%= c[:count] %></div>
+              <%= link_to c[:label], c[:path],
+                    class: "stretched-link text-decoration-none text-body-secondary" %>
+            </div>
+            <%= link_to "+", c[:new],
+                  class: "btn btn-sm btn-outline-secondary position-relative",
+                  style: "z-index: 2;",
+                  title: "Add #{c[:label].downcase.singularize}" %>
+          </div>
         </div>
       </div>
-    </div>
-  <% end %>
-</div>
+    <% end %>
+  </div>
+</section>
 
-<%= link_to "See all faculty →", teachers_path, class: "btn btn-link" %>
+<%# Faculty as compact chips: looks fine with 1 teacher or 50 %>
+<section class="mb-5">
+  <h2 class="h5 mb-3">Faculty</h2>
+  <div class="d-flex flex-wrap gap-2">
+    <% Teacher.includes(:department).order(:name).limit(12).each do |teacher| %>
+     <%= link_to teacher_path(teacher),
+      class: "glass rounded-pill d-inline-flex align-items-center gap-2 py-1 ps-1 pe-3 text-decoration-none text-body" do %>
+  <span class="avatar-chip"><%= teacher.name.to_s.first.upcase %></span>
+  <span>
+    <%= teacher.name %>
+    <small class="text-body-secondary">· <%= teacher.department&.name %></small>
+  </span>
+<% end %>
+    <% end %>
+  </div>
+</section>

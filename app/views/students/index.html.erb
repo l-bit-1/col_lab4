@@ -4,6 +4,20 @@
   <div class="alert alert-success"><%= notice %></div>
 <% end %>
 
+<div class="position-relative mb-3"
+     data-controller="autocomplete"
+     data-autocomplete-url-value="<%= search_students_path %>">
+  <input type="search"
+         class="form-control"
+         placeholder="Search student name..."
+         autocomplete="off"
+         data-autocomplete-target="input"
+         data-action="input->autocomplete#search keydown->autocomplete#keydown">
+
+  <div class="list-group position-absolute w-100 shadow autocomplete-menu"
+       data-autocomplete-target="menu" hidden></div>
+</div>
+
 <h1>Students</h1>
 
 <div id="students" class="table-responsive">
