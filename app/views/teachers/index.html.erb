@@ -1,7 +1,19 @@
 <p style="color: green"><%= notice %></p>
 
 <% content_for :title, "Teachers" %>
+<div class="position-relative mb-3"
+     data-controller="autocomplete"
+     data-autocomplete-url-value="<%= search_teachers_path %>">
+  <input type="search"
+         class="form-control"
+         placeholder="Search teacher name..."
+         autocomplete="off"
+         data-autocomplete-target="input"
+         data-action="input->autocomplete#search keydown->autocomplete#keydown">
 
+  <div class="list-group position-absolute w-100 shadow autocomplete-menu"
+       data-autocomplete-target="menu" hidden></div>
+</div>
 <h1>Teachers</h1>
 
 <table class="table table-striped table-hover align-middle">

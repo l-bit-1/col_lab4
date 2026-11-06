@@ -1,14 +1,26 @@
 class StudentsController < ApplicationController
   before_action :set_student, only: %i[ show edit update destroy ]
 
-  # GET /students or /students.json
-  def index
-    @students = Student.order(:name)
-  end
+# GET /students or /students.json
+def index
+  @q = Student.ransack(params[:q])
+  @pagy, @students = pagy(
+    :offset,
+    @q.result(distinct: true).includes(:department, :sections).order(:name),
+    limit: 10
+  )
+end
 
-   def index
-    @pagy, @students = pagy(:offset, Student.order(:name), limit: 10)
-   end
+# GET /students/search?q=jo
+def search
+  return render(json: []) if params[:q].blank?
+
+  students = Student.ransack(name_cont: params[:q]).result.order(:name).limit(8)
+
+  render json: students.map { |s|
+  { name: s.name, subtitle: "#{s.program} · Year #{s.year_level}", url: student_path(s) }
+}
+end
 
   # GET /students/1 or /students/1.json
   def show
