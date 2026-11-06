@@ -69,3 +69,34 @@ students.each do |student|
     Classlist.find_or_create_by!(student: student, section: section)
   end
 end
+
+# Generate 40 student records using Faker
+
+departments = Department.all.to_a
+
+if departments.empty?
+  raise "No departments found. Create a department first."
+end
+
+if Student.count >= 40
+  puts "There are already #{Student.count} students in the database."
+else
+  remaining = 40 - Student.count
+
+  remaining.times do
+    units = rand(12..24)
+
+    Student.create!(
+      name: Faker::Name.name,
+      department: departments.sample,
+      program: ["BS Computer Engineering", "BS Information Technology",
+                "BS Computer Science", "BS Electronics Engineering"].sample,
+      year_level: rand(1..4),
+      number_of_units: units,
+      subjects_count: rand(4..8),
+      tuition_fee: units * 1000
+    )
+  end
+
+  puts "Successfully generated #{remaining} student records."
+end

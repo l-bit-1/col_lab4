@@ -6,6 +6,10 @@ class StudentsController < ApplicationController
     @students = Student.order(:name)
   end
 
+   def index
+    @pagy, @students = pagy(:offset, Student.order(:name), limit: 10)
+   end
+
   # GET /students/1 or /students/1.json
   def show
     @classlist = Classlist.new(student: @student)
