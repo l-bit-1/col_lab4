@@ -1,7 +1,11 @@
-<%= form_with(model: teacher) do |form| %>
+<%= simple_form_for teacher do |form| %>
   <% if teacher.errors.any? %>
     <div class="alert alert-danger">
-      <h5><%= pluralize(teacher.errors.count, "error") %> prohibited this teacher from being saved:</h5>
+      <h5>
+        <%= pluralize(teacher.errors.count, "error") %>
+        prohibited this teacher from being saved:
+      </h5>
+
       <ul class="mb-0">
         <% teacher.errors.each do |error| %>
           <li><%= error.full_message %></li>
@@ -10,37 +14,31 @@
     </div>
   <% end %>
 
-  <div class="mb-3">
-    <%= form.label :name, class: "form-label" %>
-    <%= form.text_field :name, class: "form-control" %>
-  </div>
+  <%= form.input :name,
+                 input_html: { class: "form-control" } %>
 
-  <div class="mb-3">
-    <%= form.label :email, class: "form-label" %>
-    <%= form.text_field :email, class: "form-control" %>
-  </div>
+  <%= form.input :email,
+                 input_html: { class: "form-control" } %>
 
-  <div class="mb-3">
-    <%= form.label :specialization, class: "form-label" %>
-    <%= form.text_field :specialization, class: "form-control" %>
-  </div>
+  <%= form.input :specialization,
+                 input_html: { class: "form-control" } %>
 
-  <div class="mb-3">
-    <%= form.label :department_id, "Department", class: "form-label" %>
-    <%= form.collection_select :department_id,
-                               Department.order(:name),
-                               :id,
-                               :name,
-                               { prompt: "Select a department" },
-                               { class: "form-select" } %>
-  </div>
+  <%= form.input :department_id,
+                 label: "Department",
+                 collection: Department.order(:name),
+                 label_method: :name,
+                 value_method: :id,
+                 prompt: "Select a department",
+                 input_html: { class: "form-select" } %>
 
-  <div class="mb-3">
-    <%= form.label :per_unit_rate, "Per Unit Rate (₱)", class: "form-label" %>
-    <%= form.number_field :per_unit_rate, step: 0.01, class: "form-control" %>
-  </div>
+  <%= form.input :per_unit_rate,
+                 label: "Per Unit Rate (₱)",
+                 input_html: {
+                   step: 0.01,
+                   class: "form-control"
+                 } %>
 
   <div class="mt-4">
-    <%= form.submit class: "btn btn-primary" %>
+    <%= form.button :submit, class: "btn btn-primary" %>
   </div>
 <% end %>

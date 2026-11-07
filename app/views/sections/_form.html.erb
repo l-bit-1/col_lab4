@@ -1,37 +1,48 @@
-<%= form_with(model: section) do |form| %>
+<%= simple_form_for(section) do |form| %>
   <% if section.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(section.errors.count, "error") %> prohibited this section from being saved:</h2>
+    <div class="alert alert-danger">
+      <h5>
+        <%= pluralize(section.errors.count, "error") %>
+        prohibited this section from being saved:
+      </h5>
 
-      <ul>
+      <ul class="mb-0">
         <% section.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
       </ul>
     </div>
   <% end %>
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
-  <div>
-    <%= form.label :room, style: "display: block" %>
-    <%= form.text_field :room %>
-  </div>
-  <div>
-    <%= form.label :timeslot, style: "display: block" %>
-    <%= form.text_field :timeslot %>
+
+  <div class="mb-3">
+    <%= form.input :name,
+                   label: "Section Name",
+                   input_html: { class: "form-control" } %>
   </div>
 
-  <div>
-    <%= form.label :subject_id, "Subject", style: "display: block" %>
-    <%= form.collection_select :subject_id,
-                               Subject.order(:name),
-                               :id,
-                               :name,
-                               { prompt: "Select a subject" } %>
+  <div class="mb-3">
+    <%= form.input :room,
+                   label: "Room",
+                   input_html: { class: "form-control" } %>
   </div>
-  <div>
-    <%= form.submit %>
+
+  <div class="mb-3">
+    <%= form.input :timeslot,
+                   label: "Timeslot",
+                   input_html: { class: "form-control" } %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.input :subject_id,
+                   label: "Subject",
+                   collection: Subject.order(:name),
+                   value_method: :id,
+                   label_method: :name,
+                   prompt: "Select a subject",
+                   input_html: { class: "form-select" } %>
+  </div>
+
+  <div class="mt-4">
+    <%= form.button :submit, class: "btn btn-primary" %>
   </div>
 <% end %>

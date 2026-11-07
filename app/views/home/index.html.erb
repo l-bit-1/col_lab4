@@ -34,7 +34,7 @@
   { label: "Departments", count: Department.count, icon: "bi-building",     path: departments_path, new: new_department_path },
   { label: "Subjects",    count: Subject.count,    icon: "bi-book",         path: subjects_path,    new: new_subject_path },
   { label: "Sections",    count: Section.count,    icon: "bi-collection",   path: sections_path,    new: new_section_path },
-  { label: "Class Lists", count: Classlist.count,  icon: "bi-list-check",   path: classlists_path,  new: new_classlist_path }
+  { label: "Class Lists", count: Classlist.distinct.count(:section_id),  icon: "bi-list-check",   path: classlists_path,  new: new_classlist_path }
 ] %>
 
 <section class="mb-4">
