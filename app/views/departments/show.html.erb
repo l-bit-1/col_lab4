@@ -1,74 +1,126 @@
-<p style="color: green"><%= notice %></p>
+<%# Header: name, location, and actions in one place %>
+<div class="page-header glass rounded-4 p-4 mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+  <div class="d-flex align-items-center gap-3">
+    <i class="bi bi-building fs-1 text-navy"></i>
+    <div>
+      <h1 class="h3 fw-bold mb-1"><%= @department.name %></h1>
+      <p class="text-body-secondary mb-0">
+        <i class="bi bi-geo-alt"></i>
+        <%= @department.location.presence || "No location set" %>
+      </p>
+    </div>
+  </div>
 
-<div class="col-md-2">
-  <%= render "department_info", department: @department %>
-</div>  
-<h3>List of Teachers:</h3>
-<% if @department.teachers.any? %>
-  <ul>
-    <% @department.teachers.each do |teacher| %>
-      <li>
-        <%= teacher.name %> —
-        <%= teacher.email %> —
-        <%= teacher.specialization %>
-        </li>
+  <div class="d-flex flex-wrap gap-2">
+    <%= link_to departments_path, class: "btn btn-outline-secondary" do %>
+      <i class="bi bi-arrow-left me-1"></i>Back
     <% end %>
-</ul>
-<% else %>
-  <p class="text-muted fst-italic">Wow, such empty.</p>
-<% end %>
-
-<h3>Used Laboratories:</h3>
-<% if @department.laboratories.any? %>
-      <ul>
-        <% @department.laboratories.each do |laboratory| %>
-          <li>
-          <%= laboratory.name %> —
-          <%= laboratory.location %>
-          </li>
-      <% end %>
-</ul>
-<% else %>
-  <p class="text-muted fst-italic">Wow, such empty.</p>
-<% end %>
-
-
-<h3>List of estudyent:</h3>
-<% if @department.students.any? %>
-  <table class="table">
-  <thead>
-    <tr>
-      <th class="pe-5">Name</th>
-      <th class="pe-5">Program</th>
-      <th>Year Level</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @department.students.each do |student| %>
-      <tr>
-        <td class="pe-5"><%= student.name %></td>
-        <td class="pe-5"><%= student.program %></td>
-        <td><%= student.year_level %></td>
-      </tr>
+    <%= link_to edit_department_path(@department), class: "btn btn-primary" do %>
+      <i class="bi bi-pencil me-1"></i>Edit
     <% end %>
-  </tbody>
-</table>
+    <%= button_to department_path(@department), method: :delete,
+          class: "btn btn-outline-danger", form_class: "d-inline",
+          form: { data: { turbo_confirm: "Delete #{@department.name}? This cannot be undone." } } do %>
+      <i class="bi bi-trash me-1"></i>Delete
+    <% end %>
+  </div>
+</div>
+
+<%# Quick counts %>
+<div class="row row-cols-1 row-cols-sm-3 g-3 mb-4">
+  <% [
+    ["bi-people",       @department.students_count,            "Students"],
+    ["bi-person-badge", @department.teachers_count,            "Teachers"],
+    ["bi-pc-display",   @department.laboratories.size,         "Laboratories"]
+  ].each do |icon, count, label| %>
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <i class="bi <%= icon %> fs-2 text-navy"></i>
+          <div>
+            <div class="fs-3 fw-bold lh-1"><%= count %></div>
+            <span class="text-body-secondary"><%= label %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<div class="row g-3 mb-4">
+  <%# Teachers %>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5 mb-3"><i class="bi bi-person-badge text-navy me-2"></i>Teachers</h2>
+        <% if @department.teachers.any? %>
+          <div class="list-group list-group-flush">
+            <% @department.teachers.each do |teacher| %>
+              <%= link_to teacher_path(teacher),
+                    class: "list-group-item list-group-item-action d-flex align-items-center gap-3" do %>
+                <span class="avatar-chip"><%= teacher.name.to_s.first.to_s.upcase %></span>
+                <span>
+                  <span class="fw-semibold d-block"><%= teacher.name %></span>
+                  <small class="text-body-secondary"><%= teacher.email %></small>
+                </span>
+              <% end %>
+            <% end %>
+          </div>
         <% else %>
-  <p class="text-muted fst-italic">Wow, such empty.</p>
+          <p class="text-body-secondary fst-italic mb-0">No teachers yet.</p>
         <% end %>
+      </div>
+    </div>
+  </div>
 
-<div class="d-flex gap-2">
-  <%= link_to "Edit this department",
-      edit_department_path(@department),
-      class: "btn btn-warning" %>
+  <%# Laboratories %>
+  <div class="col-lg-6">
+    <div class="card h-100">
+      <div class="card-body">
+        <h2 class="h5 mb-3"><i class="bi bi-pc-display text-navy me-2"></i>Used laboratories</h2>
+        <% if @department.laboratories.any? %>
+          <div class="list-group list-group-flush">
+            <% @department.laboratories.each do |lab| %>
+              <%= link_to laboratory_path(lab), class: "list-group-item list-group-item-action" do %>
+                <%= lab.name %>
+              <% end %>
+            <% end %>
+          </div>
+        <% else %>
+          <p class="text-body-secondary fst-italic mb-0">Wow, such empty.</p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
 
-  <%= link_to "Back to departments",
-      departments_path,
-      class: "btn btn-secondary" %>
-
-  <%= button_to "Destroy this department",
-      @department,
-      method: :delete,
-      class: "btn btn-danger" %>
+<%# Students %>
+<div class="card mb-5">
+  <div class="card-body">
+    <h2 class="h5 mb-3"><i class="bi bi-people text-navy me-2"></i>Students</h2>
+    <% if @department.students.any? %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" style="--bs-table-bg: transparent;">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Program</th>
+              <th>Year level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @department.students.order(:name).each do |student| %>
+              <tr>
+                <td><%= link_to student.name, student_path(student), class: "text-decoration-none fw-semibold" %></td>
+                <td><%= student.program %></td>
+                <td><span class="badge text-bg-light border">Year <%= student.year_level %></span></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-body-secondary fst-italic mb-0">No students enrolled yet.</p>
+    <% end %>
+  </div>
 </div>

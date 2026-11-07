@@ -1,46 +1,117 @@
-<p style="color: green"><%= notice %></p>
+<% content_for :title, @teacher.name %>
+<% subjects = @teacher.subjects.to_a %>
+<% rate = @teacher.per_unit_rate || 0 %>
+<% total_units = subjects.sum { |s| s.number_of_units.to_i } %>
 
-<h1><%= @teacher.name %></h1>
-
-<div class="card mb-4">
-  <div class="card-body">
-    <h5 class="card-title">Teacher Information</h5>
-    <p><strong>Per Unit Rate:</strong> <%= number_to_currency(@teacher.per_unit_rate, unit: "₱") %></p>
-
-    <div class="alert alert-success">
-      <strong>Monthly Salary:</strong> <%= number_to_currency(@teacher.monthly_salary, unit: "₱") %>
-    </div>
-  </div>
-</div>
-
-<% if @teacher.subjects.any? %>
-  <div class="card mb-4">
-    <div class="card-body">
-      <h5 class="card-title">Assigned Subjects</h5>
-      <table class="table">
-        <thead>
-          <tr>
-            <th>Subject</th>
-            <th>Units</th>
-            <th>Salary Contribution</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% @teacher.subjects.each do |subject| %>
-            <tr>
-              <td><%= subject.name %></td>
-              <td><%= subject.number_of_units %></td>
-              <td><%= number_to_currency(subject.number_of_units * @teacher.per_unit_rate, unit: "₱") %></td>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
+<% if notice.present? %>
+  <div class="alert alert-success alert-dismissible glass rounded-4 fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
   </div>
 <% end %>
 
-<div class="d-flex gap-2">
-  <%= link_to "Edit this teacher", edit_teacher_path(@teacher), class: "btn btn-secondary" %>
-  <%= link_to "Back to teachers", teachers_path, class: "btn btn-outline-secondary" %>
-  <%= button_to "Destroy this teacher", @teacher, method: :delete, class: "btn btn-danger" %>
+<%# Header: identity and actions %>
+<div class="page-header glass rounded-4 p-4 mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+  <div class="d-flex align-items-center gap-3">
+    <span class="avatar-chip" style="width: 64px; height: 64px; font-size: 1.6rem;">
+      <%= @teacher.name.to_s.first.to_s.upcase %>
+    </span>
+    <div>
+      <h1 class="h3 fw-bold mb-1"><%= @teacher.name %></h1>
+      <p class="text-body-secondary mb-0">
+        <% if @teacher.specialization.present? %>
+          <%= @teacher.specialization %> ·
+        <% end %>
+        <% if @teacher.department %>
+          <%= link_to @teacher.department.name, department_path(@teacher.department),
+                class: "text-decoration-none" %>
+        <% else %>
+          No department
+        <% end %>
+      </p>
+      <% if @teacher.email.present? %>
+        <small class="text-body-secondary"><i class="bi bi-envelope"></i> <%= @teacher.email %></small>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="d-flex flex-wrap gap-2">
+    <%= link_to teachers_path, class: "btn btn-outline-secondary" do %>
+      <i class="bi bi-arrow-left me-1"></i>Back
+    <% end %>
+    <%= link_to edit_teacher_path(@teacher), class: "btn btn-primary" do %>
+      <i class="bi bi-pencil me-1"></i>Edit
+    <% end %>
+    <%= button_to teacher_path(@teacher), method: :delete,
+          class: "btn btn-outline-danger",
+          form: { data: { turbo_confirm: "Delete #{@teacher.name}? Their assigned subjects will be deleted too." } } do %>
+      <i class="bi bi-trash me-1"></i>Delete
+    <% end %>
+  </div>
+</div>
+
+<%# Quick numbers %>
+<div class="row row-cols-1 row-cols-sm-2 row-cols-xl-4 g-3 mb-4">
+  <% [
+    ["bi-book",            subjects.size,                                   "Subjects"],
+    ["bi-journal-bookmark",             total_units,                                     "Total units"],
+    ["bi-tag",             number_to_currency(rate, unit: "₱"),             "Per unit rate"],
+    ["bi-cash-coin",       number_to_currency(@teacher.monthly_salary, unit: "₱"), "Monthly salary"]
+  ].each do |icon, value, label| %>
+    <div class="col">
+      <div class="card h-100">
+        <div class="card-body d-flex align-items-center gap-3">
+          <i class="bi <%= icon %> fs-2 text-navy"></i>
+          <div>
+            <div class="fs-4 fw-bold lh-1"><%= value %></div>
+            <span class="text-body-secondary"><%= label %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<%# Assigned subjects %>
+<div class="card mb-5">
+  <div class="card-body">
+    <h2 class="h5 mb-3"><i class="bi bi-book text-navy me-2"></i>Assigned subjects</h2>
+
+    <% if subjects.any? %>
+      <div class="table-responsive">
+        <table class="table table-hover align-middle mb-0" style="--bs-table-bg: transparent;">
+          <thead>
+            <tr>
+              <th>Subject</th>
+              <th class="text-end">Units</th>
+              <th class="text-end">Salary contribution</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% subjects.each do |subject| %>
+              <tr>
+                <td>
+                  <%= link_to subject.name, subject_path(subject),
+                        class: "fw-semibold text-decoration-none" %>
+                </td>
+                <td class="text-end"><%= subject.number_of_units %></td>
+                <td class="text-end">
+                  <%= number_to_currency(subject.number_of_units.to_i * rate, unit: "₱") %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+          <tfoot>
+            <tr class="fw-bold">
+              <td>Total</td>
+              <td class="text-end"><%= total_units %></td>
+              <td class="text-end"><%= number_to_currency(@teacher.monthly_salary, unit: "₱") %></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    <% else %>
+      <p class="text-body-secondary fst-italic mb-0">No subjects assigned yet.</p>
+    <% end %>
+  </div>
 </div>

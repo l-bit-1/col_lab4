@@ -41,6 +41,16 @@
   </head>
 
   <body>
+
+    <% unless current_page?(root_path) %>
+       <div class="home-backdrop home-backdrop--compact">
+        <div class="home-backdrop__image"
+         style="background-image: url('<%= asset_path("ateneo_de_naga.jpg") %>')"></div>
+         <div class="home-backdrop__fade"></div>
+         <div class="home-backdrop__veil"></div>
+       </div>
+    <% end %>
+    
     <div class="d-md-none bg-dark text-white p-2">
       <button
         class="btn btn-sm btn-dark"
