@@ -62,6 +62,8 @@
   z-index: 1050;
   transform-origin: top;
   animation: autocomplete-in 0.15s ease-out;
+  max-height: 320px;
+  overflow-y: auto;
     }
 
       @keyframes autocomplete-in {
@@ -117,6 +119,8 @@
   display: flex;
   align-items: flex-end;
   padding-bottom: 1.5rem;
+  position: relative;
+  z-index: 5;
 }
 .home-hero__panel { width: 100%; max-width: 640px; }
 

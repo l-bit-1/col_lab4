@@ -30,36 +30,54 @@ export default class extends Controller {
     }, 200) // debounce so we don't hit the server on every keystroke
   }
 
-  render(items) {
-    this.items = items 
-    this.menuTarget.replaceChildren()
-    this.active = -1
+render(items) {
+  this.items = items
+  this.menuTarget.replaceChildren()
+  this.active = -1
 
-    if (items.length === 0) {
-      const empty = document.createElement("li")
-      empty.className = "list-group-item text-muted"
-      empty.textContent = "No matches"
-      this.menuTarget.append(empty)
+  if (items.length === 0) {
+    const empty = document.createElement("div")
+    empty.className = "list-group-item text-muted"
+    empty.textContent = "No matches"
+    this.menuTarget.append(empty)
+    this.menuTarget.hidden = false
+    return
+  }
+
+  const typed = this.inputTarget.value.trim()
+  const labels = {
+    starts: `Names starting with “${typed}”`,
+    contains: `Names containing “${typed}”`
+  }
+
+  let lastGroup = null
+  items.forEach((item) => {
+    if (item.group && item.group !== lastGroup) {
+      const header = document.createElement("div")
+      header.className = "list-group-item bg-body-tertiary small text-uppercase text-muted fw-semibold"
+      header.textContent = labels[item.group] ?? item.group
+      this.menuTarget.append(header)
+      lastGroup = item.group
     }
 
-    items.forEach((item) => {
-      const link = document.createElement("a")
-      link.href = item.url
-      link.className = "list-group-item list-group-item-action"
+    const link = document.createElement("a")
+    link.href = item.url
+    link.className = "list-group-item list-group-item-action"
 
-      const name = document.createElement("div")
-      name.className = "fw-semibold"
-      name.textContent = item.name
+    const name = document.createElement("div")
+    name.className = "fw-semibold"
+    name.textContent = item.name
 
-      const meta = document.createElement("small")
-      meta.className = "text-muted"
-      meta.textContent = item.subtitle ?? ""
-      link.append(name, meta)
-      this.menuTarget.append(link)
-    })
+    const meta = document.createElement("small")
+    meta.className = "text-muted"
+    meta.textContent = item.subtitle ?? ""
 
-    this.menuTarget.hidden = false
-  }
+    link.append(name, meta)
+    this.menuTarget.append(link)
+  })
+
+  this.menuTarget.hidden = false
+}
 
  keydown(event) {
   if (event.key === "Escape") return this.close()

@@ -13,13 +13,16 @@ end
 
 # GET /students/search?q=jo
 def search
-  return render(json: []) if params[:q].blank?
+  q = params[:q].to_s.strip
+  return render(json: []) if q.blank?
 
-  students = Student.ransack(name_cont: params[:q]).result.order(:name).limit(8)
+  starts   = Student.ransack(name_start: q).result.order(:name).limit(5).to_a
+  contains = Student.ransack(name_cont: q).result
+                    .where.not(id: starts.map(&:id))
+                    .order(:name).limit(5).to_a
 
-  render json: students.map { |s|
-  { name: s.name, subtitle: "#{s.program} · Year #{s.year_level}", url: student_path(s) }
-}
+  render json: starts.map   { |s| student_item(s, "starts") } +
+               contains.map { |s| student_item(s, "contains") }
 end
 
   # GET /students/1 or /students/1.json
@@ -80,6 +83,15 @@ end
     def set_student
       @student = Student.find(params.expect(:id))
     end
+
+    def student_item(student, group)
+  {
+    name: student.name,
+    subtitle: "#{student.program} · Year #{student.year_level}",
+    url: student_path(student),
+    group: group
+  }
+end
 
     # Only allow a list of trusted parameters through.
     def student_params
