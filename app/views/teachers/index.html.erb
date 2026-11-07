@@ -1,50 +1,94 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Teachers" %>
-<div class="position-relative mb-3"
-     data-controller="autocomplete"
-     data-autocomplete-url-value="<%= search_teachers_path %>">
-  <input type="search"
-         class="form-control"
-         placeholder="Search teacher name..."
-         autocomplete="off"
-         data-autocomplete-target="input"
-         data-action="input->autocomplete#search keydown->autocomplete#keydown">
 
-  <div class="list-group position-absolute w-100 shadow autocomplete-menu"
-       data-autocomplete-target="menu" hidden></div>
-</div>
-<h1>Teachers</h1>
+<% if notice.present? %>
+  <div class="alert alert-success alert-dismissible glass rounded-4 fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% end %>
 
-<table class="table table-striped table-hover align-middle">
-  <thead class="table-dark">
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Specialization</th>
-      <th>Department</th>
-      <th>Monthly Salary</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @teachers.each do |teacher| %>
-      <tr>
-        <td><%= teacher.name %></td>
-        <td><%= teacher.email %></td>
-        <td><%= teacher.specialization %></td>
-        <td><%= teacher.department.name %></td>
-        <td><%= number_to_currency(teacher.monthly_salary, unit: "₱") %></td>
-        <td>
-          <div class="d-flex gap-2">
-          <%= link_to "Show", teacher, class: "btn btn-primary btn-sm" %>
-          <%= link_to "Edit", edit_teacher_path(teacher), class: "btn btn-secondary btn-sm" %>
-          <%= button_to "Delete", teacher, method: :delete, class: "btn btn-danger btn-sm" %>
-          </div>
-        </td>
-      </tr>
+<div class="page-header glass rounded-4 p-4 mb-4">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+    <div>
+      <h1 class="h3 fw-bold mb-0">Teachers</h1>
+      <p class="text-body-secondary mb-0">The faculty and what they teach.</p>
+    </div>
+    <%= link_to new_teacher_path, class: "btn btn-primary" do %>
+      <i class="bi bi-plus-lg me-1"></i>New teacher
     <% end %>
-  </tbody>
-</table>
+  </div>
 
-<%= link_to "New teacher", new_teacher_path, class: "btn btn-success" %>
+  <div class="position-relative"
+       data-controller="autocomplete"
+       data-autocomplete-url-value="<%= search_teachers_path %>">
+    <input type="search"
+           class="form-control form-control-lg"
+           placeholder="Search teacher name..."
+           autocomplete="off"
+           data-autocomplete-target="input"
+           data-action="input->autocomplete#search keydown->autocomplete#keydown">
+    <div class="list-group position-absolute w-100 shadow autocomplete-menu"
+         data-autocomplete-target="menu" hidden></div>
+  </div>
+</div>
+
+<% if @teachers.any? %>
+  <div class="glass rounded-4 overflow-hidden mb-4">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead>
+          <tr>
+            <th>Teacher</th>
+            <th>Specialization</th>
+            <th>Department</th>
+            <th class="text-end">Monthly salary</th>
+            <th class="text-end">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @teachers.each do |teacher| %>
+            <tr id="<%= dom_id teacher %>"
+                class="row-link"
+                tabindex="0"
+                data-controller="row-link"
+                data-row-link-url-value="<%= teacher_path(teacher) %>"
+                data-action="click->row-link#go keydown->row-link#key">
+              <td>
+                <div class="d-flex align-items-center gap-3">
+                  <span class="avatar-chip"><%= teacher.name.to_s.first.to_s.upcase %></span>
+                  <div>
+                    <%= link_to teacher.name, teacher_path(teacher),
+                          class: "fw-semibold text-decoration-none text-body" %>
+                    <div class="small text-body-secondary"><%= teacher.email %></div>
+                  </div>
+                </div>
+              </td>
+              <td><%= teacher.specialization %></td>
+              <td>
+                <span class="badge text-bg-light border"><%= teacher.department&.name %></span>
+              </td>
+              <td class="text-end"><%= number_to_currency(teacher.monthly_salary, unit: "₱") %></td>
+              <td class="text-end text-nowrap">
+                <div class="d-inline-flex gap-1">
+                  <%= link_to edit_teacher_path(teacher), class: "btn btn-sm btn-outline-secondary", title: "Edit" do %>
+                    <i class="bi bi-pencil"></i>
+                  <% end %>
+                  <%= button_to teacher_path(teacher), method: :delete,
+                        class: "btn btn-sm btn-outline-danger", title: "Delete",
+                        form: { data: { turbo_confirm: "Delete #{teacher.name}?" } } do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                </div>
+            </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+<% else %>
+  <div class="glass rounded-4 p-5 text-center text-body-secondary">
+    <i class="bi bi-person-badge fs-1 d-block mb-2"></i>
+    No teachers yet.
+  </div>
+<% end %>
