@@ -1,5 +1,8 @@
 class LaboratoriesController < ApplicationController
-  before_action :set_laboratory, only: %i[ show edit update destroy ]
+  before_action :set_laboratory, only: %i[show edit update destroy]
+
+  add_breadcrumb "Home", :root_path
+  add_breadcrumb "Laboratories", :laboratories_path
 
   # GET /laboratories or /laboratories.json
   def index
@@ -8,6 +11,7 @@ class LaboratoriesController < ApplicationController
 
   # GET /laboratories/1 or /laboratories/1.json
   def show
+    add_breadcrumb @laboratory.name, laboratory_path(@laboratory)
   end
 
   # GET /laboratories/new
@@ -58,13 +62,12 @@ class LaboratoriesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_laboratory
-      @laboratory = Laboratory.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def laboratory_params
-      params.expect(laboratory: [ :name, :location, :department_id ])
-    end
+  def set_laboratory
+    @laboratory = Laboratory.find(params.expect(:id))
+  end
+
+  def laboratory_params
+    params.expect(laboratory: [:name, :location, :department_id])
+  end
 end

@@ -1,9 +1,12 @@
-<%= form_with(model: subject) do |form| %>
+<%= simple_form_for(subject) do |form| %>
   <% if subject.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(subject.errors.count, "error") %> prohibited this subject from being saved:</h2>
+    <div class="alert alert-danger">
+      <h5>
+        <%= pluralize(subject.errors.count, "error") %>
+        prohibited this subject from being saved:
+      </h5>
 
-      <ul>
+      <ul class="mb-0">
         <% subject.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,21 +14,23 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.input :name,
+                   label: "Subject Name",
+                   input_html: { class: "form-control" } %>
   </div>
 
-  <div>
-    <%= form.label :teacher_id, "Teacher", style: "display: block" %>
-    <%= form.collection_select :teacher_id,
-                               Teacher.order(:name),
-                               :id,
-                               :name,
-                               { prompt: "Select a teacher" } %>
+  <div class="mb-3">
+    <%= form.input :teacher_id,
+                   label: "Teacher",
+                   collection: Teacher.order(:name),
+                   value_method: :id,
+                   label_method: :name,
+                   prompt: "Select a teacher",
+                   input_html: { class: "form-select" } %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="mt-4">
+    <%= form.button :submit, class: "btn btn-primary" %>
   </div>
 <% end %>

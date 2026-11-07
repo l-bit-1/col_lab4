@@ -1,9 +1,12 @@
-<%= form_with(model: student) do |form| %>
+<%= simple_form_for student do |form| %>
   <% if student.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(student.errors.count, "error") %> prohibited this student from being saved:</h2>
+    <div class="alert alert-danger">
+      <h5>
+        <%= pluralize(student.errors.count, "error") %>
+        prohibited this student from being saved:
+      </h5>
 
-      <ul>
+      <ul class="mb-0">
         <% student.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,31 +14,29 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
-  </div>
+  <%= form.input :name,
+                 label: "Student Name",
+                 input_html: { class: "form-control" } %>
 
-  <div>
-    <%= form.label :year_level, style: "display: block" %>
-    <%= form.number_field :year_level %>
-  </div>
+  <%= form.input :year_level,
+                 label: "Year Level",
+                 collection: 1..4,
+                 prompt: "Select year level",
+                 input_html: { class: "form-select" } %>
 
-  <div>
-    <%= form.label :program, style: "display: block" %>
-    <%= form.text_field :program %>
-  </div>
+  <%= form.input :program,
+                 label: "Program",
+                 input_html: { class: "form-control" } %>
 
-  <div>
-    <%= form.label :department_id, "Department", style: "display: block" %>
-    <%= form.collection_select :department_id,
-                               Department.order(:name),
-                               :id,
-                               :name,
-                               { prompt: "Select a department" } %>
-  </div>
+  <%= form.input :department_id,
+                 label: "Department",
+                 collection: Department.order(:name),
+                 label_method: :name,
+                 value_method: :id,
+                 prompt: "Select a department",
+                 input_html: { class: "form-select" } %>
 
-  <div>
-    <%= form.submit %>
+  <div class="mt-4">
+    <%= form.button :submit, class: "btn btn-primary" %>
   </div>
 <% end %>

@@ -1,31 +1,50 @@
 class StudentsController < ApplicationController
-  before_action :set_student, only: %i[ show edit update destroy ]
+  before_action :set_student, only: %i[show edit update destroy]
 
-# GET /students or /students.json
-def index
-  @q = Student.ransack(params[:q])
-  @pagy, @students = pagy(
-    :offset,
-    @q.result(distinct: true).includes(:department, :sections).order(:name),
-    limit: 10
-  )
-end
+  add_breadcrumb "Home", :root_path
+  add_breadcrumb "Students", :students_path
 
-# GET /students/search?q=jo
-def search
-  return render(json: []) if params[:q].blank?
+  # GET /students or /students.json
+  def index
+    @q = Student.ransack(params[:q])
 
-  students = Student.ransack(name_cont: params[:q]).result.order(:name).limit(8)
-
-  render json: students.map { |s|
-  { name: s.name, subtitle: "#{s.program} · Year #{s.year_level}", url: student_path(s) }
-}
-end
+    @pagy, @students = pagy(
+      :offset,
+      @q.result(distinct: true)
+        .includes(:department, :sections)
+        .order(:name),
+      limit: 10
+    )
+  end
 
   # GET /students/1 or /students/1.json
   def show
+    add_breadcrumb @student.name, student_path(@student)
+
     @classlist = Classlist.new(student: @student)
-    @available_sections = Section.where.not(id: @student.section_ids).order(:name)
+
+    @available_sections = Section
+      .where.not(id: @student.section_ids)
+      .order(:name)
+  end
+
+  # GET /students/search?q=jo
+  def search
+    return render(json: []) if params[:q].blank?
+
+    students = Student
+      .ransack(name_cont: params[:q])
+      .result
+      .order(:name)
+      .limit(8)
+
+    render json: students.map { |s|
+      {
+        name: s.name,
+        subtitle: "#{s.program} · Year #{s.year_level}",
+        url: student_path(s)
+      }
+    }
   end
 
   # GET /students/new
@@ -43,11 +62,26 @@ end
 
     respond_to do |format|
       if @student.save
-        format.html { redirect_to @student, notice: "Student was successfully created." }
-        format.json { render :show, status: :created, location: @student }
+        format.html do
+          redirect_to @student,
+                      notice: "Student was successfully created."
+        end
+
+        format.json do
+          render :show,
+                 status: :created,
+                 location: @student
+        end
       else
-        format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @student.errors, status: :unprocessable_content }
+        format.html do
+          render :new,
+                 status: :unprocessable_content
+        end
+
+        format.json do
+          render json: @student.errors,
+                 status: :unprocessable_content
+        end
       end
     end
   end
@@ -56,11 +90,27 @@ end
   def update
     respond_to do |format|
       if @student.update(student_params)
-        format.html { redirect_to @student, notice: "Student was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @student }
+        format.html do
+          redirect_to @student,
+                      notice: "Student was successfully updated.",
+                      status: :see_other
+        end
+
+        format.json do
+          render :show,
+                 status: :ok,
+                 location: @student
+        end
       else
-        format.html { render :edit, status: :unprocessable_content }
-        format.json { render json: @student.errors, status: :unprocessable_content }
+        format.html do
+          render :edit,
+                 status: :unprocessable_content
+        end
+
+        format.json do
+          render json: @student.errors,
+                 status: :unprocessable_content
+        end
       end
     end
   end
@@ -70,19 +120,34 @@ end
     @student.destroy!
 
     respond_to do |format|
-      format.html { redirect_to students_path, notice: "Student was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
+      format.html do
+        redirect_to students_path,
+                    notice: "Student was successfully destroyed.",
+                    status: :see_other
+      end
+
+      format.json do
+        head :no_content
+      end
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_student
-      @student = Student.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def student_params
-      params.expect(student: [ :name, :year_level, :program, :department_id ])
-    end
+  # Load the student for show, edit, update, and destroy.
+  def set_student
+    @student = Student.find(params.expect(:id))
+  end
+
+  # Only allow trusted parameters.
+  def student_params
+    params.expect(
+      student: [
+        :name,
+        :year_level,
+        :program,
+        :department_id
+      ]
+    )
+  end
 end
