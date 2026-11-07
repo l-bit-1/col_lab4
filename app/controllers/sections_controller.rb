@@ -1,5 +1,8 @@
 class SectionsController < ApplicationController
-  before_action :set_section, only: %i[ show edit update destroy ]
+  before_action :set_section, only: %i[show edit update destroy]
+
+  add_breadcrumb "Home", :root_path
+  add_breadcrumb "Sections", :sections_path
 
   # GET /sections or /sections.json
   def index
@@ -8,6 +11,7 @@ class SectionsController < ApplicationController
 
   # GET /sections/1 or /sections/1.json
   def show
+    add_breadcrumb @section.name, section_path(@section)
   end
 
   # GET /sections/new
@@ -25,11 +29,26 @@ class SectionsController < ApplicationController
 
     respond_to do |format|
       if @section.save
-        format.html { redirect_to @section, notice: "Section was successfully created." }
-        format.json { render :show, status: :created, location: @section }
+        format.html do
+          redirect_to @section,
+                      notice: "Section was successfully created."
+        end
+
+        format.json do
+          render :show,
+                 status: :created,
+                 location: @section
+        end
       else
-        format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @section.errors, status: :unprocessable_content }
+        format.html do
+          render :new,
+                 status: :unprocessable_content
+        end
+
+        format.json do
+          render json: @section.errors,
+                 status: :unprocessable_content
+        end
       end
     end
   end
@@ -38,11 +57,27 @@ class SectionsController < ApplicationController
   def update
     respond_to do |format|
       if @section.update(section_params)
-        format.html { redirect_to @section, notice: "Section was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @section }
+        format.html do
+          redirect_to @section,
+                      notice: "Section was successfully updated.",
+                      status: :see_other
+        end
+
+        format.json do
+          render :show,
+                 status: :ok,
+                 location: @section
+        end
       else
-        format.html { render :edit, status: :unprocessable_content }
-        format.json { render json: @section.errors, status: :unprocessable_content }
+        format.html do
+          render :edit,
+                 status: :unprocessable_content
+        end
+
+        format.json do
+          render json: @section.errors,
+                 status: :unprocessable_content
+        end
       end
     end
   end
@@ -52,19 +87,34 @@ class SectionsController < ApplicationController
     @section.destroy!
 
     respond_to do |format|
-      format.html { redirect_to sections_path, notice: "Section was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
+      format.html do
+        redirect_to sections_path,
+                    notice: "Section was successfully destroyed.",
+                    status: :see_other
+      end
+
+      format.json do
+        head :no_content
+      end
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_section
-      @section = Section.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def section_params
-      params.expect(section: [ :name, :room, :timeslot, :subject_id ])
-    end
+  # Load the section for show, edit, update, and destroy.
+  def set_section
+    @section = Section.find(params.expect(:id))
+  end
+
+  # Only allow trusted parameters.
+  def section_params
+    params.expect(
+      section: [
+        :name,
+        :room,
+        :timeslot,
+        :subject_id
+      ]
+    )
+  end
 end

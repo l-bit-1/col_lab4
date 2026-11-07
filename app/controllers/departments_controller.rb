@@ -1,5 +1,8 @@
 class DepartmentsController < ApplicationController
-  before_action :set_department, only: %i[ show edit update destroy ]
+  before_action :set_department, only: %i[show edit update destroy]
+
+  add_breadcrumb "Home", :root_path
+  add_breadcrumb "Departments", :departments_path
 
   # GET /departments or /departments.json
   def index
@@ -8,6 +11,7 @@ class DepartmentsController < ApplicationController
 
   # GET /departments/1 or /departments/1.json
   def show
+    add_breadcrumb @department.name, department_path(@department)
   end
 
   # GET /departments/new
@@ -58,13 +62,12 @@ class DepartmentsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_department
-      @department = Department.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def department_params
-      params.expect(department: [ :name, :location ])
-    end
+  def set_department
+    @department = Department.find(params.expect(:id))
+  end
+
+  def department_params
+    params.expect(department: [:name, :location])
+  end
 end

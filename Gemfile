@@ -72,3 +72,5 @@ gem "faker"
 gem "pagy"
 
 gem "ransack"
+
+gem "breadcrumbs_on_rails"
