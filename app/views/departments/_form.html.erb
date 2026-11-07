@@ -1,9 +1,12 @@
-<%= form_with(model: department) do |form| %>
+<%= simple_form_for(department) do |form| %>
   <% if department.errors.any? %>
-    <div style="color: red">
-      <h2><%= pluralize(department.errors.count, "error") %> prohibited this department from being saved:</h2>
+    <div class="alert alert-danger">
+      <h5>
+        <%= pluralize(department.errors.count, "error") %>
+        prohibited this department from being saved:
+      </h5>
 
-      <ul>
+      <ul class="mb-0">
         <% department.errors.each do |error| %>
           <li><%= error.full_message %></li>
         <% end %>
@@ -11,17 +14,19 @@
     </div>
   <% end %>
 
-  <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+  <div class="mb-3">
+    <%= form.input :name,
+                   label: "Department Name",
+                   input_html: { class: "form-control" } %>
   </div>
 
-  <div>
-    <%= form.label :location, style: "display: block" %>
-    <%= form.text_field :location %>
+  <div class="mb-3">
+    <%= form.input :location,
+                   label: "Location",
+                   input_html: { class: "form-control" } %>
   </div>
 
-  <div>
-    <%= form.submit %>
+  <div class="mt-4">
+    <%= form.button :submit, class: "btn btn-primary" %>
   </div>
 <% end %>

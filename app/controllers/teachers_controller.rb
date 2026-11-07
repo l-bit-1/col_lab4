@@ -1,28 +1,37 @@
 class TeachersController < ApplicationController
-  before_action :set_teacher, only: %i[ show edit update destroy ]
+  before_action :set_teacher, only: %i[show edit update destroy]
+
+  add_breadcrumb "Home", :root_path
+  add_breadcrumb "Teachers", :teachers_path
 
   # GET /teachers or /teachers.json
   def index
     @teachers = Teacher.all
   end
 
-# GET /teachers/search?q=ep
-def search
-  q = params[:q].to_s.strip
-  return render(json: []) if q.blank?
+  # GET /teachers/search?q=ep
+  def search
+    return render(json: []) if params[:q].blank?
 
-  base     = Teacher.includes(:department)
-  starts   = base.ransack(name_start: q).result.order(:name).limit(5).to_a
-  contains = base.ransack(name_cont: q).result
-                 .where.not(id: starts.map(&:id))
-                 .order(:name).limit(5).to_a
+    teachers = Teacher
+      .ransack(name_cont: params[:q])
+      .result
+      .includes(:department)
+      .order(:name)
+      .limit(8)
 
-  render json: starts.map   { |t| teacher_item(t, "starts") } +
-               contains.map { |t| teacher_item(t, "contains") }
-end
+    render json: teachers.map { |t|
+      {
+        name: t.name,
+        subtitle: t.department&.name,
+        url: teacher_path(t)
+      }
+    }
+  end
 
   # GET /teachers/1 or /teachers/1.json
   def show
+    add_breadcrumb @teacher.name, teacher_path(@teacher)
   end
 
   # GET /teachers/new
@@ -40,11 +49,26 @@ end
 
     respond_to do |format|
       if @teacher.save
-        format.html { redirect_to @teacher, notice: "Teacher was successfully created." }
-        format.json { render :show, status: :created, location: @teacher }
+        format.html do
+          redirect_to @teacher,
+                      notice: "Teacher was successfully created."
+        end
+
+        format.json do
+          render :show,
+                 status: :created,
+                 location: @teacher
+        end
       else
-        format.html { render :new, status: :unprocessable_content }
-        format.json { render json: @teacher.errors, status: :unprocessable_content }
+        format.html do
+          render :new,
+                 status: :unprocessable_content
+        end
+
+        format.json do
+          render json: @teacher.errors,
+                 status: :unprocessable_content
+        end
       end
     end
   end
@@ -53,11 +77,27 @@ end
   def update
     respond_to do |format|
       if @teacher.update(teacher_params)
-        format.html { redirect_to @teacher, notice: "Teacher was successfully updated.", status: :see_other }
-        format.json { render :show, status: :ok, location: @teacher }
+        format.html do
+          redirect_to @teacher,
+                      notice: "Teacher was successfully updated.",
+                      status: :see_other
+        end
+
+        format.json do
+          render :show,
+                 status: :ok,
+                 location: @teacher
+        end
       else
-        format.html { render :edit, status: :unprocessable_content }
-        format.json { render json: @teacher.errors, status: :unprocessable_content }
+        format.html do
+          render :edit,
+                 status: :unprocessable_content
+        end
+
+        format.json do
+          render json: @teacher.errors,
+                 status: :unprocessable_content
+        end
       end
     end
   end
@@ -67,24 +107,35 @@ end
     @teacher.destroy!
 
     respond_to do |format|
-      format.html { redirect_to teachers_path, notice: "Teacher was successfully destroyed.", status: :see_other }
-      format.json { head :no_content }
+      format.html do
+        redirect_to teachers_path,
+                    notice: "Teacher was successfully destroyed.",
+                    status: :see_other
+      end
+
+      format.json do
+        head :no_content
+      end
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_teacher
-      @teacher = Teacher.find(params.expect(:id))
-    end
 
-    def teacher_item(teacher, group)
-  { name: teacher.name, subtitle: teacher.department&.name,
-    url: teacher_path(teacher), group: group }
-end
+  # Load the teacher for show, edit, update, and destroy.
+  def set_teacher
+    @teacher = Teacher.find(params.expect(:id))
+  end
 
-    # Only allow a list of trusted parameters through.
-    def teacher_params
-      params.expect(teacher: [ :name, :email, :specialization, :department_id, :per_unit_rate ])
-    end
+  # Only allow trusted parameters.
+  def teacher_params
+    params.expect(
+      teacher: [
+        :name,
+        :email,
+        :specialization,
+        :department_id,
+        :per_unit_rate
+      ]
+    )
+  end
 end

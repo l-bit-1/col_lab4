@@ -1,5 +1,8 @@
 class ClasslistsController < ApplicationController
-  before_action :set_classlist, only: %i[ show edit update destroy ]
+  before_action :set_classlist, only: %i[show edit update destroy]
+
+  add_breadcrumb "Home", :root_path
+  add_breadcrumb "Classlists", :classlists_path
 
   # GET /classlists or /classlists.json
   def index
@@ -8,6 +11,7 @@ class ClasslistsController < ApplicationController
 
   # GET /classlists/1 or /classlists/1.json
   def show
+    add_breadcrumb "Classlist ##{@classlist.id}", classlist_path(@classlist)
   end
 
   # GET /classlists/new
@@ -67,13 +71,12 @@ class ClasslistsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_classlist
-      @classlist = Classlist.find(params.expect(:id))
-    end
 
-    # Only allow a list of trusted parameters through.
-    def classlist_params
-      params.expect(classlist: [ :section_id, :student_id ])
-    end
+  def set_classlist
+    @classlist = Classlist.find(params.expect(:id))
+  end
+
+  def classlist_params
+    params.expect(classlist: [:section_id, :student_id])
+  end
 end

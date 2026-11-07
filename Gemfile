@@ -65,8 +65,12 @@ group :test do
   gem "selenium-webdriver"
 end
 
+gem "simple_form"
+
 gem "faker"
 
 gem "pagy"
 
 gem "ransack"
+
+gem "breadcrumbs_on_rails"
