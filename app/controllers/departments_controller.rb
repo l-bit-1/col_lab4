@@ -9,10 +9,12 @@ class DepartmentsController < ApplicationController
     @departments = Department.all
   end
 
-  # GET /departments/1 or /departments/1.json
-  def show
-    add_breadcrumb @department.name, department_path(@department)
-  end
+# GET /departments/1 or /departments/1.json
+# GET /departments/1 or /departments/1.json
+def show
+  @department = Department.includes(:teachers, :laboratories, :students).find(params[:id])
+  add_breadcrumb @department.name, department_path(@department)
+end
 
   # GET /departments/new
   def new
@@ -68,6 +70,6 @@ class DepartmentsController < ApplicationController
   end
 
   def department_params
-    params.expect(department: [:name, :location])
+    params.expect(department: [ :name, :location ])
   end
 end
