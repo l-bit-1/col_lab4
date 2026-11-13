@@ -70,3 +70,5 @@ gem "faker"
 gem "pagy"
 
 gem "ransack"
+
+gem "simple_form", "~> 5.4"
