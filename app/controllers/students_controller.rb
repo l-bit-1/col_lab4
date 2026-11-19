@@ -1,4 +1,5 @@
 class StudentsController < ApplicationController
+  before_action :require_admin!, only: %i[new create edit update destroy]
   before_action :set_student, only: %i[show edit update destroy]
 
   add_breadcrumb "Home", :root_path
