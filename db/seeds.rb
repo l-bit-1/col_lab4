@@ -100,3 +100,19 @@ else
 
   puts "Successfully generated #{remaining} student records."
 end
+
+# 7. Default User Accounts
+
+admin = User.find_or_initialize_by(email: "admin@myadnu.local")
+admin.password = "Admin12345!"
+admin.password_confirmation = "Admin12345!"
+admin.role = "admin"
+admin.save!
+
+staff = User.find_or_initialize_by(email: "staff@myadnu.local")
+staff.password = "Staff12345!"
+staff.password_confirmation = "Staff12345!"
+staff.role = "staff"
+staff.save!
+
+puts "Default user accounts created successfully."
