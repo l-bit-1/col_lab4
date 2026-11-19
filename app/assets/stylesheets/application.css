@@ -168,4 +168,61 @@
               height .35s cubic-bezier(.4, 0, .2, 1),
               opacity .2s ease;
 }
+
+/* compact backdrop for inner pages */
+.home-backdrop--compact { height: 40vh; }
+.home-backdrop--compact .home-backdrop__image { filter: blur(4px); }
+.home-backdrop--compact .home-backdrop__fade {
+  background: linear-gradient(to bottom, rgba(255,255,255,0) 0%, #fff 100%);
+}
+.home-backdrop--compact .home-backdrop__veil { opacity: .45; }
+
+/* buttons: navy for actions, same shape everywhere */
+.btn { border-radius: .5rem; transition: transform .15s ease, box-shadow .15s ease; }
+.btn:active { transform: scale(.97); }
+.btn-primary {
+  --bs-btn-bg: var(--adnu-navy);
+  --bs-btn-border-color: var(--adnu-navy);
+  --bs-btn-hover-bg: #142350;
+  --bs-btn-hover-border-color: #142350;
+  --bs-btn-active-bg: #101c42;
+  --bs-btn-active-border-color: #101c42;
+}
+.btn-success {
+  --bs-btn-bg: var(--adnu-navy);
+  --bs-btn-border-color: var(--adnu-navy);
+  --bs-btn-hover-bg: #142350;
+  --bs-btn-hover-border-color: #142350;
+}
+
+/* every Bootstrap card gets the frosted look */
+.card {
+  background: rgba(255,255,255,.78);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.6);
+  border-radius: 1rem;
+}
+
+/* tables inside a glass wrapper */
+.glass .table { --bs-table-bg: transparent; margin-bottom: 0; }
+.glass .table thead th {
+  font-size: .75rem; text-transform: uppercase; letter-spacing: .04em;
+  color: var(--bs-secondary-color); border-bottom-width: 1px;
+}
+
+/* forms (new/edit pages) */
+.form-panel { max-width: 720px; }
+.form-control, .form-select { border-radius: .5rem; }
+.form-control:focus, .form-select:focus {
+  border-color: var(--adnu-navy);
+  box-shadow: 0 0 0 .2rem rgba(27, 47, 107, .15);
+}
+
+.card .list-group-item {
+  background: transparent;
+  border-color: rgba(0, 0, 0, .06);
+}
+.card .list-group-item-action:hover { background: rgba(27, 47, 107, .06); }
+
 }

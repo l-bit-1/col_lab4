@@ -1,19 +1,36 @@
-<p style="color: green"><%= notice %></p>
+<%= render "shared/page_header",
+      title: "Departments",
+      subtitle: "Offices and where to find them.",
+      new_path: new_department_path,
+      new_label: "New department" %>
 
-<% content_for :title, "Departments" %>
-
-<h1>Departments</h1>
-
-<div id="departments" class="row g-1">
-  <% @departments.each do |department| %>
-    <div class="col-md-3">
-      <%= render department %>
-    </div>
-  <% end %>
-</div>
-
-<div class="mt-4">
-  <%= link_to "New department",
-      new_department_path,
-      class: "btn btn-success" %>
-</div>
+<% if @departments.any? %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3">
+    <% @departments.each do |department| %>
+      <div class="col">
+        <div class="card stat-card h-100 position-relative">
+          <div class="card-body d-flex gap-3">
+            <i class="bi bi-building fs-2 text-navy"></i>
+            <div class="flex-grow-1">
+              <h2 class="h5 mb-1">
+                <%= link_to department.name, department,
+                      class: "stretched-link text-decoration-none text-body" %>
+              </h2>
+              <p class="text-body-secondary mb-2">
+                <i class="bi bi-geo-alt"></i>
+                <%= department.location.presence || "No location set" %>
+              </p>
+              <span class="badge text-bg-light border"><%= department.students_count %> students</span>
+              <span class="badge text-bg-light border"><%= department.teachers_count %> teachers</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="glass rounded-4 p-5 text-center text-body-secondary">
+    <i class="bi bi-building fs-1 d-block mb-2"></i>
+    No departments yet.
+  </div>
+<% end %>

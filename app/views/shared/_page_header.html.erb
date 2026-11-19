@@ -1,0 +1,14 @@
+<div class="page-header glass rounded-4 p-4 mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+  <div>
+    <h1 class="h3 fw-bold mb-0"><%= title %></h1>
+    <% if local_assigns[:subtitle].present? %>
+      <p class="text-body-secondary mb-0"><%= subtitle %></p>
+    <% end %>
+  </div>
+
+  <% if local_assigns[:new_path].present? %>
+    <%= link_to new_path, class: "btn btn-primary" do %>
+      <i class="bi bi-plus-lg me-1"></i><%= local_assigns[:new_label] || "New" %>
+    <% end %>
+  <% end %>
+</div>
