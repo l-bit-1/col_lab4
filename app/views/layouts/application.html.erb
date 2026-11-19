@@ -1,102 +1,57 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= content_for(:title) || "myADNU LARPER" %></title>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Department Student Application">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="view-transition" content="same-origin">
-    <%= csrf_meta_tags %>
-    <%= csp_meta_tag %>
+<head>
+  <title><%= content_for(:title) || "myADNU LARPER" %></title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="application-name" content="Department Student Application">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="view-transition" content="same-origin">
 
-    <%= yield :head %>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+  <link rel="icon" href="/icon.png" type="image/png">
+  <link rel="icon" href="/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Bootstrap 5 stylesheet %>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-    >
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-    <%# Bootstrap Icons %>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
-    >
+  <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+  <%= javascript_importmap_tags %>
 
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
-    <%= javascript_importmap_tags %>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
+</head>
 
-    <%# Bootstrap's JavaScript %>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-      defer
-    ></script>
-  </head>
-
-  <body>
-
-    <% unless current_page?(root_path) %>
-       <div class="home-backdrop home-backdrop--compact">
-        <div class="home-backdrop__image"
-         style="background-image: url('<%= asset_path("ateneo_de_naga.jpg") %>')"></div>
-         <div class="home-backdrop__fade"></div>
-         <div class="home-backdrop__veil"></div>
-       </div>
-    <% end %>
-    
+<body>
+  <% if logged_in? %>
     <div class="d-md-none bg-dark text-white p-2">
-      <button
-        class="btn btn-sm btn-dark"
-        type="button"
-        data-bs-toggle="offcanvas"
-        data-bs-target="#sidebar"
-      >
+      <button class="btn btn-sm btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
         &#9776; Menu
       </button>
-
       <span class="ms-2">Department Student Application</span>
     </div>
 
- <div class="d-flex">
-
-      <button class="sidebar-tab d-none d-md-flex" type="button"
-              data-sidebar-toggle aria-label="Toggle sidebar">
+    <div class="d-flex">
+      <button class="sidebar-tab d-none d-md-flex" type="button" data-sidebar-toggle aria-label="Toggle sidebar">
         <i class="bi bi-chevron-left"></i>
       </button>
 
-      <div
-        class="offcanvas-md offcanvas-start bg-dark text-white flex-shrink-0 min-vh-100"
-        id="sidebar"
-        data-turbo-permanent
-        style="width: 230px"
-      >
+      <div class="offcanvas-md offcanvas-start bg-dark text-white flex-shrink-0 min-vh-100"
+           id="sidebar" data-turbo-permanent style="width: 230px">
+
         <div class="offcanvas-header">
           <h5 class="offcanvas-title">Menu</h5>
-          <button
-            type="button"
-            class="btn-close btn-close-white"
-            data-bs-dismiss="offcanvas"
-            data-bs-target="#sidebar"
-          ></button>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" data-bs-target="#sidebar"></button>
         </div>
 
-        <div class="offcanvas-body flex-column p-3">
-          <%= image_tag "/adnulogo.png",
-                alt: "Ateneo De Naga University Logo",
-                class: "school-logo mb-2" %>
+        <div class="offcanvas-body d-flex flex-column p-3">
+          <%= image_tag "/adnulogo.png", alt: "Ateneo De Naga University Logo", class: "school-logo mb-2" %>
 
           <h5 class="d-none d-md-block mb-1">MyADNU LARPER</h5>
-
-          <small class="d-none d-md-block mb-3 fst-italic">
-            Academic Management System
-          </small>
+          <small class="d-none d-md-block mb-3 fst-italic">Academic Management System</small>
 
           <div class="sidebar-nav" data-controller="sidebar-pill">
             <ul class="nav nav-pills flex-column gap-1">
@@ -110,15 +65,35 @@
               <li class="nav-item"><%= sidebar_link "Laboratories", laboratories_path, "laboratories", "bi-pc-display" %></li>
             </ul>
           </div>
+
+          <div class="mt-auto pt-4 mt-4 border-top border-secondary">
+            <div class="text-white mb-2">
+              <i class="bi bi-person-circle me-2"></i>
+              <%= current_user.email %>
+            </div>
+
+            <small class="text-secondary d-block mb-3">
+              Role: <%= current_user.role.capitalize %>
+            </small>
+
+            <%= button_to session_path, method: :delete, class: "btn btn-danger btn-sm w-100" do %>
+              <i class="bi bi-box-arrow-right me-2"></i>
+              Logout
+            <% end %>
+          </div>
         </div>
       </div>
 
       <main class="flex-grow-1 p-4" style="min-width: 0">
-          <div class="container-fluid px-4 pt-3">
-            <%= render_breadcrumbs %>
-          </div>
-      <%= yield %>
+        <div class="container-fluid px-4 pt-3">
+          <%= render_breadcrumbs %>
+        </div>
+        <%= yield %>
       </main>
     </div>
-  </body>
+
+  <% else %>
+    <%= yield %>
+  <% end %>
+</body>
 </html>

@@ -74,3 +74,5 @@ gem "pagy"
 gem "ransack"
 
 gem "breadcrumbs_on_rails"
+
+gem "bcrypt"
