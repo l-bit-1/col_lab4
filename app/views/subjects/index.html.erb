@@ -1,27 +1,53 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Subjects" %>
 
-<h1>Subjects</h1>
+<% if notice.present? %>
+  <div class="alert alert-success alert-dismissible glass rounded-4 fade show" role="alert">
+    <%= notice %>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+<% end %>
 
-<div id="subjects" class="row g-1">
-  <% @subjects.each do |subject| %>
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <%= render subject %>
+<%= render "shared/page_header",
+      title: "Subjects",
+      subtitle: "What is taught and who teaches it.",
+      new_path: new_subject_path,
+      new_label: "New subject" %>
 
-          <%= link_to "Show this subject",
-              subject,
-              class: "btn btn-primary mt-2" %>
+<% if @subjects.any? %>
+  <div id="subjects" class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-4">
+    <% @subjects.each do |subject| %>
+      <div class="col">
+        <div class="card stat-card h-100 position-relative">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-3">
+              <h2 class="h5 mb-0">
+                <%= link_to subject.name, subject_path(subject),
+                      class: "stretched-link text-decoration-none text-body" %>
+              </h2>
+              <i class="bi bi-book text-navy fs-4"></i>
+            </div>
+
+            <ul class="list-unstyled small text-body-secondary mb-3 d-grid gap-1">
+              <li>
+                <i class="bi bi-person-badge me-2"></i>
+                <%= subject.teacher&.name || "No teacher assigned" %>
+              </li>
+              <% if subject.respond_to?(:number_of_units) && subject.number_of_units.present? %>
+                <li><i class="bi bi-layers me-2"></i><%= subject.number_of_units %> units</li>
+              <% end %>
+            </ul>
+
+            <span class="badge text-bg-light border">
+              <%= pluralize(subject.sections.size, "section") %>
+            </span>
+          </div>
         </div>
       </div>
-    </div>
-  <% end %>
-</div>
-
-<div class="mt-4">
-  <%= link_to "New subject",
-      new_subject_path,
-      class: "btn btn-success" %>
-</div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="glass rounded-4 p-5 text-center text-body-secondary">
+    <i class="bi bi-book fs-1 d-block mb-2"></i>
+    No subjects yet.
+  </div>
+<% end %>
