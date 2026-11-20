@@ -1,5 +1,5 @@
 class StudentsController < ApplicationController
-  before_action :require_admin!, except: %i[index show]
+  before_action :require_admin!, except: %i[index show search]
   before_action :set_student, only: %i[show edit update destroy]
 
   add_breadcrumb "Home", :root_path

@@ -3,12 +3,6 @@
 <% rate = @teacher.per_unit_rate || 0 %>
 <% total_units = subjects.sum { |s| s.number_of_units.to_i } %>
 
-<% if notice.present? %>
-  <div class="alert alert-success alert-dismissible glass rounded-4 fade show" role="alert">
-    <%= notice %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-<% end %>
 
 <%# Header: identity and actions %>
 <div class="page-header glass rounded-4 p-4 mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">

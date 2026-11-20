@@ -36,8 +36,15 @@ class ApplicationController < ActionController::Base
   end
 
   def require_admin!
-    redirect_to root_path, alert: "You are not authorized to perform this action." unless admin?
+    return if admin?
+
+    redirect_back(
+      fallback_location: root_path,
+      alert: "Access denied. You do not have permission to perform this action.",
+      status: :see_other
+    )
   end
+
 
   def enforce_session_timeout
     return unless session[:user_id]
