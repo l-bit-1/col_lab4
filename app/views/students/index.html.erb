@@ -1,63 +1,87 @@
 <% content_for :title, "Students" %>
 
-<% if notice.present? %>
-  <div class="alert alert-success"><%= notice %></div>
-<% end %>
-
-<div class="position-relative mb-3"
-     data-controller="autocomplete"
-     data-autocomplete-url-value="<%= search_students_path %>">
-  <input type="search"
-         class="form-control"
-         placeholder="Search student name..."
-         autocomplete="off"
-         data-autocomplete-target="input"
-         data-action="input->autocomplete#search keydown->autocomplete#keydown">
-
-  <div class="list-group position-absolute w-100 shadow autocomplete-menu"
-       data-autocomplete-target="menu" hidden></div>
-</div>
-
-<h1>Students</h1>
-
-<div id="students" class="table-responsive">
-  <table class="table table-striped table-hover table-bordered align-middle">
-    <thead class="table-dark">
-      <tr>
-        <th>Name</th>
-        <th>Year Level</th>
-        <th>Program</th>
-        <th>Department</th>
-        <th>Subjects</th>
-        <th>Units</th>
-        <th>Tuition Fee</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <% @students.each do |student| %>
-        <tr id="<%= dom_id student %>">
-          <td><%= student.name %></td>
-          <td><%= student.year_level %></td>
-          <td><%= student.program %></td>
-          <td><%= student.department.name %></td>
-          <td><%= student.subjects_count %></td>
-          <td><%= student.number_of_units %></td>
-          <td><%= number_to_currency student.tuition_fee, unit: "P" %></td>
-          <td class="text-nowrap">
-            <%# button_to makes a <form> for each button, and a form is normally %>
-            <%# a block, so the buttons would stack. d-inline-block puts them in a row. %>
-            <%= button_to "Show", student, method: :get,
-                          class: "btn btn-sm btn-primary", form_class: "d-inline-block" %>
-            <%= button_to "Edit", edit_student_path(student), method: :get,
-                          class: "btn btn-sm btn-secondary", form_class: "d-inline-block" %>
-            <%= button_to "Delete", student, method: :delete,
-                          class: "btn btn-sm btn-danger", form_class: "d-inline-block" %>
-          </td>
-        </tr>
+<div class="page-header glass rounded-4 p-4 mb-4">
+  <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
+    <div>
+      <h1 class="h3 fw-bold mb-0">Students</h1>
+      <p class="text-body-secondary mb-0">Everyone enrolled in the department.</p>
+    </div>
+    <% if admin? %>
+      <%= link_to new_student_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-1"></i>New student
       <% end %>
-    </tbody>
-  </table>
+    <% end %>
+  </div>
+
+  <div class="position-relative"
+       data-controller="autocomplete"
+       data-autocomplete-url-value="<%= search_students_path %>">
+    <input type="search"
+           class="form-control form-control-lg"
+           placeholder="Search student name..."
+           autocomplete="off"
+           data-autocomplete-target="input"
+           data-action="input->autocomplete#search keydown->autocomplete#keydown">
+    <div class="list-group position-absolute w-100 shadow autocomplete-menu"
+         data-autocomplete-target="menu" hidden></div>
+  </div>
 </div>
+
+<div id="students" class="glass rounded-4 overflow-hidden mb-3">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle mb-0">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Year level</th>
+          <th>Program</th>
+          <th>Department</th>
+          <th class="text-end">Subjects</th>
+          <th class="text-end">Units</th>
+          <% if admin? %>
+            <th class="text-end">Tuition fee</th>
+            <th class="text-end">Actions</th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% @students.each do |student| %>
+          <tr id="<%= dom_id student %>"
+              class="row-link"
+              tabindex="0"
+              data-controller="row-link"
+              data-row-link-url-value="<%= student_path(student) %>"
+              data-action="click->row-link#go keydown->row-link#key">
+            <td>
+              <%= link_to student.name, student_path(student),
+                    class: "fw-semibold text-decoration-none text-body" %>
+            </td>
+            <td><span class="badge text-bg-light border">Year <%= student.year_level %></span></td>
+            <td><%= student.program %></td>
+            <td><%= student.department&.name %></td>
+            <td class="text-end"><%= student.subjects_count %></td>
+            <td class="text-end"><%= student.number_of_units %></td>
+            <% if admin? %>
+              <td class="text-end"><%= number_to_currency student.tuition_fee, unit: "P" %></td>
+              <td class="text-end text-nowrap">
+                <div class="d-inline-flex gap-1">
+                  <%= link_to edit_student_path(student),
+                        class: "btn btn-sm btn-outline-secondary", title: "Edit" do %>
+                    <i class="bi bi-pencil"></i>
+                  <% end %>
+                  <%= button_to student_path(student), method: :delete,
+                        class: "btn btn-sm btn-outline-danger", title: "Delete",
+                        form: { data: { turbo_confirm: "Delete #{student.name}?" } } do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                </div>
+              </td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+
 <%= @pagy.series_nav(:bootstrap).html_safe %>
-<%= link_to "New student", new_student_path, class: "btn btn-success" %>

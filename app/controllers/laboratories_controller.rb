@@ -1,5 +1,5 @@
 class LaboratoriesController < ApplicationController
-  before_action :require_admin!, only: %i[new create edit update destroy]
+  before_action :require_admin!, except: %i[index show]
   before_action :set_laboratory, only: %i[show edit update destroy]
 
   add_breadcrumb "Home", :root_path
@@ -69,6 +69,6 @@ class LaboratoriesController < ApplicationController
   end
 
   def laboratory_params
-    params.expect(laboratory: [:name, :location, :department_id])
+    params.expect(laboratory: [ :name, :location, :department_id ])
   end
 end

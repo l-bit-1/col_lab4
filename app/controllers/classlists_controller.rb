@@ -1,5 +1,5 @@
 class ClasslistsController < ApplicationController
-  before_action :require_admin!, only: %i[new create edit update destroy]
+  before_action :require_admin!, except: %i[index show]
   before_action :set_classlist, only: %i[show edit update destroy]
 
   add_breadcrumb "Home", :root_path
@@ -78,6 +78,6 @@ class ClasslistsController < ApplicationController
   end
 
   def classlist_params
-    params.expect(classlist: [:section_id, :student_id])
+    params.expect(classlist: [ :section_id, :student_id ])
   end
 end

@@ -1,6 +1,6 @@
 class DepartmentsController < ApplicationController
-  before_action :require_admin!, only: %i[new create edit update destroy]
   before_action :set_department, only: %i[show edit update destroy]
+  before_action :require_admin!, except: %i[index show]
 
   add_breadcrumb "Home", :root_path
   add_breadcrumb "Departments", :departments_path

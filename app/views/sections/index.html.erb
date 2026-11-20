@@ -1,22 +1,43 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Sections" %>
 
-<h1>Sections</h1>
 
-<div id="sections" class ="row g-1">
-  <% @sections.each do |section| %>
-    <div class="col-auto">
-    <%= render section %>
-    <p>
-      <%= link_to "Show this section", 
-      section,
-      class: "btn btn-primary mt-2"%>
-    </p>
-    </div>
-  <% end %>
-</div>
+<%= render "shared/page_header",
+      title: "Sections",
+      subtitle: "Rooms, schedules, and who teaches what.",
+      new_path: new_section_path,
+      new_label: "New section" %>
 
-<%= link_to "New section", 
-new_section_path,
-class: "btn btn-success" %>
+<% if @sections.any? %>
+  <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 g-3 mb-4">
+    <% @sections.each do |section| %>
+      <div class="col">
+        <div class="card stat-card h-100 position-relative">
+          <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between gap-2 mb-3">
+              <h2 class="h5 mb-0">
+                <%= link_to section.name, section_path(section),
+                      class: "stretched-link text-decoration-none text-body" %>
+              </h2>
+              <i class="bi bi-collection text-navy fs-4"></i>
+            </div>
+
+            <p class="fw-semibold mb-3">
+              <%= section.subject&.name || "No subject" %>
+            </p>
+
+            <ul class="list-unstyled small text-body-secondary mb-0 d-grid gap-1">
+              <li><i class="bi bi-person-badge me-2"></i><%= section.subject&.teacher&.name || "No teacher assigned" %></li>
+              <li><i class="bi bi-door-open me-2"></i><%= section.room.presence || "No room" %></li>
+              <li><i class="bi bi-clock me-2"></i><%= section.timeslot.presence || "No timeslot" %></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <div class="glass rounded-4 p-5 text-center text-body-secondary">
+    <i class="bi bi-collection fs-1 d-block mb-2"></i>
+    No sections yet.
+  </div>
+<% end %>

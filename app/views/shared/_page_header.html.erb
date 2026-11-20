@@ -6,7 +6,7 @@
     <% end %>
   </div>
 
-  <% if local_assigns[:new_path].present? %>
+  <% if local_assigns[:new_path].present? && admin? %>
     <%= link_to new_path, class: "btn btn-primary" do %>
       <i class="bi bi-plus-lg me-1"></i><%= local_assigns[:new_label] || "New" %>
     <% end %>

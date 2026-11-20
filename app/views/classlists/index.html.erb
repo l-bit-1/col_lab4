@@ -1,59 +1,50 @@
-<p style="color: green"><%= notice %></p>
-
 <% content_for :title, "Classlists" %>
 
-<h1 class="mb-4">Classlists</h1>
+<%= render "shared/page_header",
+      title: "Classlists",
+      subtitle: "Who is enrolled in each section.",
+      new_path: new_classlist_path,
+      new_label: "New classlist" %>
 
-<div id="classlists" class="row g-4">
-  <% @classlists.group_by(&:section).each do |section, classlists| %>
-    <div class="col-md-4">
-      <div class="card shadow-sm h-100">
-
-
-    <Section Header>
-    <div class="card-header">
-      <h4 class="mb-0">
-        <%= section.subject.name %> - <%= section.name %>
-      </h4>
-    </div>
-
-    <Students>
-    <div class="card-body">
-      <% classlists.each do |classlist| %>
-        <div class="card mb-3">
-          <div class="card-body">
-            <%= render classlist %>
-
-            <div class="d-flex gap-2 mt-3">
-              <%= link_to "Show",
-                  classlist,
-                  class: "btn btn-primary btn-sm" %>
-
-              <%= link_to "Edit",
-                  edit_classlist_path(classlist),
-                  class: "btn btn-warning btn-sm" %>
-
-              <%= button_to "Delete",
-                  classlist,
-                  method: :delete,
-                  class: "btn btn-danger btn-sm",
-                  data: { turbo_confirm: "Are you sure?" } %>
-            </div>
-          </div>
+<% if @classlists.any? %>
+  <div id="classlists" class="card-grid mb-4">
+    <% @classlists.group_by(&:section).each do |section, classlists| %>
+      <div class="card h-100">
+        <div class="card-header bg-transparent d-flex align-items-center justify-content-between">
+          <h2 class="h5 mb-0">
+            <%= section&.subject&.name || "No subject" %> - <%= section&.name || "No section" %>
+          </h2>
+          <span class="badge text-bg-light border"><%= classlists.size %></span>
         </div>
-      <% end %>
-    </div>
 
+        <div class="list-group list-group-flush">
+          <% classlists.each do |classlist| %>
+            <div class="list-group-item d-flex align-items-center justify-content-between gap-2">
+              <%= link_to classlist.student&.name || "Unknown student", classlist,
+                    class: "fw-semibold text-decoration-none text-body" %>
+
+              <% if admin? %>
+                <div class="d-inline-flex gap-1">
+                  <%= link_to edit_classlist_path(classlist),
+                        class: "btn btn-sm btn-outline-secondary", title: "Edit" do %>
+                    <i class="bi bi-pencil"></i>
+                  <% end %>
+                  <%= button_to classlist_path(classlist), method: :delete,
+                        class: "btn btn-sm btn-outline-danger", title: "Remove from section",
+                        form: { data: { turbo_confirm: "Remove #{classlist.student&.name} from this section?" } } do %>
+                    <i class="bi bi-trash"></i>
+                  <% end %>
+                </div>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
-</div>
-
-
+<% else %>
+  <div class="glass rounded-4 p-5 text-center text-body-secondary">
+    <i class="bi bi-list-check fs-1 d-block mb-2"></i>
+    No class lists yet.
+  </div>
 <% end %>
-
-</div>
-
-<div class="mt-4">
-  <%= link_to "New Classlist",
-      new_classlist_path,
-      class: "btn btn-success" %>
-</div>

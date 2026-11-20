@@ -1,5 +1,5 @@
 class SubjectsController < ApplicationController
-  before_action :require_admin!, only: %i[new create edit update destroy]
+  before_action :require_admin!, except: %i[index show]
   before_action :set_subject, only: %i[show edit update destroy]
 
   add_breadcrumb "Home", :root_path

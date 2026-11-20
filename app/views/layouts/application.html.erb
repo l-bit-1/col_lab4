@@ -7,6 +7,9 @@
   <meta name="application-name" content="Department Student Application">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="view-transition" content="same-origin">
+  <% if logged_in? %>
+    <meta name="turbo-cache-control" content="no-cache">
+  <% end %>
 
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
@@ -27,6 +30,15 @@
 
 <body>
   <% if logged_in? %>
+    <% unless current_page?(root_path) %>
+      <div class="home-backdrop home-backdrop--compact">
+        <div class="home-backdrop__image"
+             style="background-image: url('<%= asset_path("ateneo_de_naga.jpg") %>')"></div>
+        <div class="home-backdrop__fade"></div>
+        <div class="home-backdrop__veil"></div>
+      </div>
+    <% end %>
+
     <div class="d-md-none bg-dark text-white p-2">
       <button class="btn btn-sm btn-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebar">
         &#9776; Menu
@@ -66,7 +78,7 @@
             </ul>
           </div>
 
-          <div class="mt-auto pt-4 mt-4 border-top border-secondary">
+          <div class="mt-auto pt-4 border-top border-secondary">
             <div class="text-white mb-2">
               <i class="bi bi-person-circle me-2"></i>
               <%= current_user.email %>
@@ -84,29 +96,33 @@
         </div>
       </div>
 
-<main class="flex-grow-1 p-4" style="min-width: 0">
-  <div class="container-fluid px-4 pt-3">
-    <%= render_breadcrumbs %>
+      <main class="flex-grow-1 p-4" style="min-width: 0">
+        <div class="container-fluid px-4 pt-3">
+          <%= render_breadcrumbs %>
 
-    <% flash.each do |type, message| %>
-      <% alert_class = case type.to_sym
-                       when :alert then "alert-danger"
-                       when :notice then "alert-success"
-                       else "alert-info"
-                       end %>
+          <% flash.each do |type, message| %>
+            <% alert_class = case type.to_sym
+                             when :alert then "alert-danger"
+                             when :notice then "alert-success"
+                             else "alert-info"
+                             end %>
+            <div class="alert <%= alert_class %> alert-dismissible fade show mt-3" role="alert">
+              <%= message %>
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+          <% end %>
+        </div>
 
-          <div class="alert <%= alert_class %> alert-dismissible fade show mt-3" role="alert">
-            <%= message %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        <% end %>
-      </div>
-
-      <%= yield %>
-    </main>
+        <%= yield %>
+      </main>
     </div>
 
   <% else %>
+    <% if alert.present? %>
+      <div class="container mt-4">
+        <div class="alert alert-danger"><%= alert %></div>
+      </div>
+    <% end %>
     <%= yield %>
   <% end %>
 </body>

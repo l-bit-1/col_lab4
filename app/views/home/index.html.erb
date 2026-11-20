@@ -1,5 +1,6 @@
 <%# Backdrop photo (same as before) %>
-<div class="home-backdrop" data-controller="backdrop" data-backdrop-distance-value="800">  <div class="home-backdrop__image"
+<div class="home-backdrop" data-controller="backdrop" data-backdrop-distance-value="800">  
+  <div class="home-backdrop__image"
        data-backdrop-target="image"
        style="background-image: url('<%= asset_path("ateneo_de_naga.jpg") %>')"></div>
   <div class="home-backdrop__fade"></div>
@@ -49,10 +50,13 @@
               <%= link_to c[:label], c[:path],
                     class: "stretched-link text-decoration-none text-body-secondary" %>
             </div>
-            <%= link_to "+", c[:new],
-                  class: "btn btn-sm btn-outline-secondary position-relative",
-                  style: "z-index: 2;",
-                  title: "Add #{c[:label].downcase.singularize}" %>
+             
+            <% if admin? %>
+              <%= link_to "+", c[:new],
+                    class: "btn btn-sm btn-outline-secondary position-relative",
+                    style: "z-index: 2;",
+                    title: "Add #{c[:label].downcase.singularize}" %>
+            <% end %>
           </div>
         </div>
       </div>

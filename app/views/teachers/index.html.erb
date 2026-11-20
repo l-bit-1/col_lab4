@@ -1,11 +1,5 @@
 <% content_for :title, "Teachers" %>
 
-<% if notice.present? %>
-  <div class="alert alert-success alert-dismissible glass rounded-4 fade show" role="alert">
-    <%= notice %>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-  </div>
-<% end %>
 
 <div class="page-header glass rounded-4 p-4 mb-4">
   <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-3">
@@ -13,8 +7,10 @@
       <h1 class="h3 fw-bold mb-0">Teachers</h1>
       <p class="text-body-secondary mb-0">The faculty and what they teach.</p>
     </div>
-    <%= link_to new_teacher_path, class: "btn btn-primary" do %>
-      <i class="bi bi-plus-lg me-1"></i>New teacher
+    <% if admin? %>
+      <%= link_to new_teacher_path, class: "btn btn-primary" do %>
+        <i class="bi bi-plus-lg me-1"></i>New teacher
+      <% end %>
     <% end %>
   </div>
 
@@ -41,8 +37,10 @@
             <th>Teacher</th>
             <th>Specialization</th>
             <th>Department</th>
-            <th class="text-end">Monthly salary</th>
-            <th class="text-end">Actions</th>
+            <% if admin? %>
+              <th class="text-end">Monthly salary</th>
+              <th class="text-end">Actions</th>
+            <% end %>
           </tr>
         </thead>
         <tbody>
@@ -67,19 +65,21 @@
               <td>
                 <span class="badge text-bg-light border"><%= teacher.department&.name %></span>
               </td>
-              <td class="text-end"><%= number_to_currency(teacher.monthly_salary, unit: "₱") %></td>
-              <td class="text-end text-nowrap">
-                <div class="d-inline-flex gap-1">
-                  <%= link_to edit_teacher_path(teacher), class: "btn btn-sm btn-outline-secondary", title: "Edit" do %>
-                    <i class="bi bi-pencil"></i>
-                  <% end %>
-                  <%= button_to teacher_path(teacher), method: :delete,
-                        class: "btn btn-sm btn-outline-danger", title: "Delete",
-                        form: { data: { turbo_confirm: "Delete #{teacher.name}?" } } do %>
-                    <i class="bi bi-trash"></i>
-                  <% end %>
-                </div>
-            </td>
+              <% if admin? %>
+                <td class="text-end"><%= number_to_currency(teacher.monthly_salary, unit: "₱") %></td>
+                <td class="text-end text-nowrap">
+                  <div class="d-inline-flex gap-1">
+                    <%= link_to edit_teacher_path(teacher), class: "btn btn-sm btn-outline-secondary", title: "Edit" do %>
+                      <i class="bi bi-pencil"></i>
+                    <% end %>
+                    <%= button_to teacher_path(teacher), method: :delete,
+                          class: "btn btn-sm btn-outline-danger", title: "Delete",
+                          form: { data: { turbo_confirm: "Delete #{teacher.name}?" } } do %>
+                      <i class="bi bi-trash"></i>
+                    <% end %>
+                  </div>
+                </td>
+              <% end %>
             </tr>
           <% end %>
         </tbody>
