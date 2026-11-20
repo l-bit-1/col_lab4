@@ -1,4 +1,5 @@
 class LaboratoriesController < ApplicationController
+  before_action :require_admin!, only: %i[new create edit update destroy]
   before_action :set_laboratory, only: %i[show edit update destroy]
 
   add_breadcrumb "Home", :root_path
