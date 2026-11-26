@@ -244,3 +244,16 @@
 
 /* optional: keep the photo visible longer on inner pages */
 .home-backdrop--compact { height: 60vh; }
+
+.autocomplete-header {
+  background: #f1f3f9;
+  color: var(--adnu-navy);
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  padding-top: .35rem;
+  padding-bottom: .35rem;
+}
+
+.autocomplete-menu { max-height: 340px; overflow-y: auto; }

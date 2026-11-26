@@ -10,25 +10,19 @@ class TeachersController < ApplicationController
     @teachers = Teacher.all
   end
 
-  # GET /teachers/search?q=ep
-  def search
-    return render(json: []) if params[:q].blank?
+def search
+  q = params[:q].to_s.strip
+  return render(json: []) if q.blank?
 
-    teachers = Teacher
-      .ransack(name_cont: params[:q])
-      .result
-      .includes(:department)
-      .order(:name)
-      .limit(8)
+  base     = Teacher.includes(:department)
+  starts   = base.ransack(name_start: q).result.order(:name).limit(5).to_a
+  contains = base.ransack(name_cont: q).result
+                 .where.not(id: starts.map(&:id))
+                 .order(:name).limit(5).to_a
 
-    render json: teachers.map { |t|
-      {
-        name: t.name,
-        subtitle: t.department&.name,
-        url: teacher_path(t)
-      }
-    }
-  end
+  render json: starts.map   { |t| teacher_item(t, "starts") } +
+               contains.map { |t| teacher_item(t, "contains") }
+end
 
   # GET /teachers/1 or /teachers/1.json
   def show
@@ -138,5 +132,10 @@ class TeachersController < ApplicationController
         :per_unit_rate
       ]
     )
+  end
+
+  def teacher_item(teacher, group)
+  { name: teacher.name, subtitle: teacher.department&.name,
+    url: teacher_path(teacher), group: group }
   end
 end
