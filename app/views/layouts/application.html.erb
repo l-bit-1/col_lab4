@@ -28,7 +28,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" defer></script>
 </head>
 
-<body>
+<body data-controller="arrow-nav" data-action="keydown->arrow-nav#key">
   <% if logged_in? %>
     <% unless current_page?(root_path) %>
       <div class="home-backdrop home-backdrop--compact">
