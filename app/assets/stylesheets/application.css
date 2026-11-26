@@ -310,3 +310,34 @@
 .breadcrumb-bar > .alert { flex-basis: 100%; }
 
 main { padding-top: 1.5rem !important; }
+
+.weather { display: flex; align-items: center; gap: .75rem; }
+.weather__icon { font-size: 2rem; line-height: 1; }
+.weather__temp { font-size: 1.4rem; font-weight: 700; line-height: 1.1; }
+.weather__label { font-size: .8rem; }
+.weather__detail { font-size: .7rem; opacity: .75; }
+
+.weather--sidebar {
+  padding: .75rem;
+  border-radius: .5rem;
+  background: rgba(255, 255, 255, .06);
+  color: rgba(255, 255, 255, .9);
+}
+
+/* home page, bottom-right corner */
+.weather--corner {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 20;
+  padding: .75rem 1rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, .78);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(27, 47, 107, .12);
+  box-shadow: 0 2px 8px rgba(27, 47, 107, .12);
+  color: var(--adnu-navy);
+}
+
+.weather--corner { display: none; }
+html.sidebar-collapsed .weather--corner { display: flex; }
