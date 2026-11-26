@@ -97,8 +97,8 @@
       </div>
 
       <main class="flex-grow-1 p-4" style="min-width: 0">
-        <div class="container-fluid px-4 pt-3">
-          <%= render_breadcrumbs %>
+        <div class="breadcrumb-bar">
+          <%= render_breadcrumbs separator: " / " %>
 
           <% flash.each do |type, message| %>
             <% alert_class = case type.to_sym

@@ -282,3 +282,31 @@
 }
 
 .autocomplete-menu { max-height: 340px; overflow-y: auto; }
+
+.breadcrumb-bar {
+  width: fit-content;
+  max-width: 100%;
+  padding: .3rem .8rem;
+  margin-bottom: .75rem;
+  margin-left: 8px;
+  border-radius: 900px;
+  background: rgba(255, 255, 255, .7);
+  backdrop-filter: blur(6px);
+}
+.breadcrumb-bar > a {
+  color: var(--adnu-navy);
+  text-decoration: none;
+  font-weight: 500;
+}
+.breadcrumb-bar > a:hover { text-decoration: underline; }
+
+/* the current page, shown as a small frosted pill so it reads over the photo */
+.breadcrumb-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem;
+}
+.breadcrumb-bar > .alert { flex-basis: 100%; }
+
+main { padding-top: 1.5rem !important; }
