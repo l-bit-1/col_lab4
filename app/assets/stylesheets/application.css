@@ -150,23 +150,48 @@
   background: transparent !important;
   transition: color .2s ease, background-color .2s ease;
 }
-.sidebar-nav a.active { color: #fff; }
-.sidebar-nav a:not(.active):hover { background: rgba(255,255,255,.08) !important; }
+
+/* ---------- sidebar pill ---------- */
+.sidebar-nav { position: relative; }
 
 .sidebar-pill {
   position: absolute;
   top: 0; left: 0;
   z-index: 0;
   border-radius: .375rem;
-  background: #0d6efd;        /* same blue as the old highlight */
+  background: #0d6efd;
   opacity: 0;
   pointer-events: none;
 }
 .sidebar-pill.is-ready {
-  transition: transform .35s cubic-bezier(.4, 0, .2, 1),
-              width .35s cubic-bezier(.4, 0, .2, 1),
-              height .35s cubic-bezier(.4, 0, .2, 1),
-              opacity .2s ease;
+  transition: transform .1s cubic-bezier(.2, .8, .2, 1),
+              width .1s cubic-bezier(.2, .8, .2, 1),
+              height .1s cubic-bezier(.2, .8, .2, 1),
+              opacity .1s ease;
+}
+
+.sidebar-nav a.active { color: #fff; }
+.sidebar-nav a.is-previewed { color: #fff; }
+.sidebar-nav.is-previewing a.active:not(.is-previewed) { color: rgba(255,255,255,.85); }
+
+/* let clicks through while the page crossfade runs, so the glide can be interrupted */
+::view-transition { pointer-events: none; }
+
+/* keyboard focus in the page, matching the hover look */
+:focus-visible { outline: 2px solid var(--adnu-navy); outline-offset: 2px; }
+.stat-card:focus-within { transform: translateY(-2px); box-shadow: 0 .5rem 1rem rgba(0,0,0,.12); }
+.stat-card:has(:focus-visible) { outline: 2px solid var(--adnu-navy); outline-offset: 2px; }
+.stat-card a:focus-visible { outline: none; }
+.list-group-item-action:focus-visible { background: rgba(27, 47, 107, .08); outline-offset: -2px; }
+.row-link:focus-visible > * { background-color: rgba(27, 47, 107, .08); }
+
+/* the pill is the focus indicator inside the sidebar (keep this LAST) */
+.sidebar-nav a,
+.sidebar-nav a:focus,
+.sidebar-nav a:focus-visible,
+.sidebar-nav .nav-link:focus-visible {
+  outline: none !important;
+  box-shadow: none !important;
 }
 
 /* compact backdrop for inner pages */
@@ -257,3 +282,31 @@
 }
 
 .autocomplete-menu { max-height: 340px; overflow-y: auto; }
+
+.breadcrumb-bar {
+  width: fit-content;
+  max-width: 100%;
+  padding: .3rem .8rem;
+  margin-bottom: .75rem;
+  margin-left: 8px;
+  border-radius: 900px;
+  background: rgba(255, 255, 255, .7);
+  backdrop-filter: blur(6px);
+}
+.breadcrumb-bar > a {
+  color: var(--adnu-navy);
+  text-decoration: none;
+  font-weight: 500;
+}
+.breadcrumb-bar > a:hover { text-decoration: underline; }
+
+/* the current page, shown as a small frosted pill so it reads over the photo */
+.breadcrumb-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .25rem;
+}
+.breadcrumb-bar > .alert { flex-basis: 100%; }
+
+main { padding-top: 1.5rem !important; }
